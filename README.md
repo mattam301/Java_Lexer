@@ -30,7 +30,9 @@ gradle run --args="path/to/example/file.vc"
 ```
 
 Ví dụ:
+```bash
 gradle run --args="src/main/resources/example_gcd.vc"
+```
 
 ### Đầu ra
 
