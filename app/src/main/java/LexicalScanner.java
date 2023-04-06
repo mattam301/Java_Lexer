@@ -192,9 +192,11 @@ public class LexicalScanner {
     }
 
     private void toVctok(String filename, List<String> spelling) throws IOException {
-        String outputPath =
-                Objects.requireNonNull(App.class.getResource("")).getFile()
-                        + filename + ".vctok";
+        // String outputPath =
+        //         Objects.requireNonNull(App.class.getResource("")).getFile()
+        //                 + filename + ".vctok";
+        
+        String outputPath = filename + ".vctok";
         File outputFile = new File(outputPath);
         outputFile.createNewFile();
         OutputStream outputStream = new FileOutputStream(outputFile);
