@@ -1,35 +1,63 @@
 package com.hayade.lexicalscanner;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Objects;
+import java.io.BufferedInputStream;
+
 
 public class App {
 
     @SuppressWarnings("java:S899")
     public static void main(String[] args) throws IOException {
+        
         if (args.length == 0) {
             System.out.println("No input file");
             return;
         }
 
-        InputStream dfaStream = ClassLoader.getSystemResourceAsStream("dfa.dat");
+        InputStream dfaStream = App.class.getResourceAsStream("/dfa.dat");
         LexicalScanner scanner = new LexicalScanner(dfaStream);
         for (String vcFile : args) {
-            InputStream inputCodeStream = ClassLoader.getSystemResourceAsStream(vcFile);
 
+            File file = new File(vcFile);
+            if (!file.exists()) {
+                System.out.println("Input file does not exist: " + vcFile);
+                continue;
+            } else{
+                System.out.println("Input file có mà địt mẹ: " + vcFile);
+            }
+
+            //InputStream inputCodeStream = new FileInputStream(vcFile);
             String filename = vcFile.substring(0, vcFile.length() - 3);
-            String outputPath =
-                    Objects.requireNonNull(App.class.getResource("")).getFile()
-                            + filename + ".verbose.vctok";
-            File outputFile = new File(outputPath);
-            outputFile.createNewFile();
-            OutputStream outputStream = new FileOutputStream(outputFile);
 
-            scanner.scan(inputCodeStream, outputStream, filename);
+            String outputPath = filename + ".verbose.vctok";
+            //System.out.println("test " + outputPath);
+            File outputFile = new File(outputPath);
+            if (!outputFile.exists()) {
+                System.out.println("Output file does not exist: " + outputFile);
+                continue;
+            } else{
+                System.out.println("Output file có mà địt mẹ: " + outputFile);
+            }
+            outputFile.createNewFile();
+
+
+            try (InputStream inputCodeStream = new FileInputStream(vcFile);
+                BufferedInputStream bufferedInputStream = new BufferedInputStream(inputCodeStream);
+                OutputStream outputStream = new FileOutputStream(outputFile)) {
+                scanner.scan(bufferedInputStream, outputStream, filename);
+            } catch (IOException e) {
+                System.err.println("Error processing: " + e.getMessage());
+        }
+
+            // OutputStream outputStream = new FileOutputStream(outputFile);
+            // System.out.println("input " + inputCodeStream);
+            //scanner.scan(inputCodeStream, outputStream, filename);
+
         }
     }
 
