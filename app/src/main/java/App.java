@@ -1,4 +1,4 @@
-package com.hayade.lexicalscanner;
+
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -28,7 +28,7 @@ public class App {
                 System.out.println("Input file does not exist: " + vcFile);
                 continue;
             } else{
-                System.out.println("Input file có mà địt mẹ: " + vcFile);
+                System.out.println("Input file có mà đây này " + vcFile);
             }
 
             //InputStream inputCodeStream = new FileInputStream(vcFile);
@@ -41,7 +41,7 @@ public class App {
                 System.out.println("Output file does not exist: " + outputFile);
                 continue;
             } else{
-                System.out.println("Output file có mà địt mẹ: " + outputFile);
+                System.out.println("Output file có mà đây này: " + outputFile);
             }
             outputFile.createNewFile();
 
@@ -53,11 +53,6 @@ public class App {
             } catch (IOException e) {
                 System.err.println("Error processing: " + e.getMessage());
         }
-
-            // OutputStream outputStream = new FileOutputStream(outputFile);
-            // System.out.println("input " + inputCodeStream);
-            //scanner.scan(inputCodeStream, outputStream, filename);
-
         }
     }
 

@@ -1,4 +1,4 @@
-package com.hayade.lexicalscanner;
+
 
 import java.io.*;
 import java.util.*;
@@ -144,7 +144,7 @@ public class LexicalScanner {
         } else if (!(match(nextChar, WHITESPACE_PATTERN) && state == initialState)) {
             String c = match(nextChar, VERTICAL_WHITESPACE_PATTERN) ? "newline"
                     : Character.toString(nextChar);
-            errors.add(String.format("Error[Ln %d]: current string is: '%s', but next char is: %s",
+                    errors.add(String.format("Error[Ln %d]: current string is: '%s', but next char is: '%s'",
                     line, token, c));
         }
     }
@@ -182,10 +182,12 @@ public class LexicalScanner {
 
         printStream.println("Tokens:");
         tokens.forEach(printStream::println);
-
+        if(errors.size() != 0){
         printStream.println("\nErrors:");
         errors.forEach(printStream::println);
-
+        } else{
+            printStream.println("\nThere's no errors !!!");
+        }
         printStream.close();
     }
 

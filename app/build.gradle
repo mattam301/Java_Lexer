@@ -12,7 +12,7 @@ dependencies {
 }
 
 application {
-    mainClass = "com.hayade.lexicalscanner.App"
+    mainClass = "App"
 }
 
 tasks.named("test") {

@@ -1,4 +1,4 @@
-package com.hayade.lexicalscanner;
+
 
 import java.util.regex.Pattern;
 
