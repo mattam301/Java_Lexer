@@ -37,4 +37,4 @@ gradle run --args="example_fib.vc"
 ### Đầu ra
 
 - Đầu ra chuẩn
-- File `.verbose.vctok` và `.vctok` trong folder `app/build/classes/java/main/com/hayade/lexicalscanner`
+- File `.verbose.vctok` và `.vctok` trong folder `app/src/main/resources`
