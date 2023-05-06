@@ -1,4 +1,4 @@
-
+package LexicalScanner;
 
 import java.io.*;
 import java.util.*;
@@ -144,7 +144,7 @@ public class LexicalScanner {
         } else if (!(match(nextChar, WHITESPACE_PATTERN) && state == initialState)) {
             String c = match(nextChar, VERTICAL_WHITESPACE_PATTERN) ? "newline"
                     : Character.toString(nextChar);
-                    errors.add(String.format("Error[Ln %d]: current string is: '%s', but next char is: '%s'",
+                    errors.add(String.format("Error[Ln %d]: current string is: '%s', but next char is: '%s'",
                     line, token, c));
         }
     }
@@ -197,6 +197,7 @@ public class LexicalScanner {
         //                 + filename + ".vctok";
         
         String outputPath = filename + ".vctok";
+        System.out.println("\t\t\t\t\t\t\t" + outputPath);
         File outputFile = new File(outputPath);
         outputFile.createNewFile();
         OutputStream outputStream = new FileOutputStream(outputFile);

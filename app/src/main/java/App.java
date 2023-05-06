@@ -1,5 +1,7 @@
 
 
+import LexicalScanner.LexicalScanner;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -28,7 +30,7 @@ public class App {
                 System.out.println("Input file does not exist: " + vcFile);
                 continue;
             } else{
-                System.out.println("Input file có mà đây này " + vcFile);
+                System.out.println("Input file có mà đây này: " + vcFile);
             }
 
             //InputStream inputCodeStream = new FileInputStream(vcFile);
@@ -37,14 +39,10 @@ public class App {
             String outputPath = filename + ".verbose.vctok";
             //System.out.println("test " + outputPath);
             File outputFile = new File(outputPath);
-            if (!outputFile.exists()) {
-                System.out.println("Output file does not exist: " + outputFile);
-                continue;
-            } else{
-                System.out.println("Output file có mà đây này: " + outputFile);
-            }
-            outputFile.createNewFile();
 
+            System.out.println("Output file có mà đây này: " + outputPath);
+
+            outputFile.createNewFile();
 
             try (InputStream inputCodeStream = new FileInputStream(vcFile);
                 BufferedInputStream bufferedInputStream = new BufferedInputStream(inputCodeStream);

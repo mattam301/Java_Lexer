@@ -9,7 +9,7 @@
 
 ### Đầu vào
 
-- Đặt file `dfa.dat` trong folder [resources](app/src/main/resources)
+- Đặt file `dfa.dat` và các file `.vc` trong folder [resources](app/src/main/resources)
 - Cấu trúc file `dfa.dat`:
   - Tổng số lượng các trạng thái
   - Trạng thái ban đầu
@@ -26,15 +26,15 @@
 Chạy lệnh sau tại thư mục gốc của project:
 
 ```bash
-gradle run --args="path/to/example/file.vc"
+gradle run --args="file.vc"
 ```
 
 Ví dụ:
 ```bash
-gradle run --args="src/main/resources/example_gcd.vc"
+gradle run --args="example_fib.vc"
 ```
 
 ### Đầu ra
 
 - Đầu ra chuẩn
-- File `.verbose.vctok` trong folder `app/build/classes/java/main/com/hayade/lexicalscanner`
+- File `.verbose.vctok` và `.vctok` trong folder `app/build/classes/java/main/com/hayade/lexicalscanner`

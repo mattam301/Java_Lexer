@@ -1,9 +1,9 @@
-
+package LexicalScanner;
 
 import java.util.regex.Pattern;
 
 /**
- * Transition.
+ * LexicalScanner.Transition.
  */
 public class Transition {
 
@@ -11,7 +11,7 @@ public class Transition {
     private State nextState;
 
     /**
-     * Transition Constructor.
+     * LexicalScanner.Transition Constructor.
      *
      * @param matcher matcher to check next character.
      * @param nextState next state when next character matches this transition input.

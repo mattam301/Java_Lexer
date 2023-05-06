@@ -1,10 +1,10 @@
-
+package LexicalScanner;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * State of Transition Graph.
+ * LexicalScanner.State of LexicalScanner.Transition Graph.
  */
 public class State {
 
@@ -15,7 +15,7 @@ public class State {
     private List<Transition> transitions = new ArrayList<>();
 
     /**
-     * State Constructor.
+     * LexicalScanner.State Constructor.
      *
      * @param isEnd If the current state is an end state
      * @param haveNextState If the current state have edges going out
