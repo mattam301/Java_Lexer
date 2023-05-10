@@ -34,7 +34,27 @@ public class FirstFollowSets {
                 firstSet.add(symbol);
             } else {
                 calculateFirstSet(grammar, firstSets, symbol);
-                firstSet.addAll(firstSets.get(symbol));
+                Set<String> firstNext = new HashSet<>(firstSets.get(symbol));
+                if (!firstNext.contains(EPSILON)) {
+                    firstSet.addAll(firstNext);
+                }
+                else {
+                    int current = 0;
+                    while (firstNext.contains(EPSILON)) {
+                        firstNext.remove(EPSILON);
+                        firstSet.addAll(firstSets.get(firstNext));
+
+                        symbol = (current + 1 < production.size()) ? production.get(current + 1) : null;
+                        current++;
+
+                        if (symbol == null) {
+                            firstSet.add(EPSILON);
+                            break;
+                        }
+
+                        firstNext = new HashSet<>(firstSets.get(symbol));
+                    }
+                }
             }
         }
 
@@ -91,6 +111,8 @@ public class FirstFollowSets {
                                     followSet.addAll(firstNext);
 
                                     nextSymbol = (current + 1 < production.size()) ? production.get(current + 1) : null;
+                                    current++;
+
                                     if (nextSymbol == null) {
                                         followSet.addAll(followSets.get(otherNonTerminal));
                                         break;
