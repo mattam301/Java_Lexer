@@ -76,17 +76,31 @@ public class FirstFollowSets {
                     if (symbol.equals(nonTerminal)) {
                         String nextSymbol = (i + 1 < production.size()) ? production.get(i + 1) : null;
 
-                        if (nextSymbol != null && isTerminal(nextSymbol)) {
-                            followSet.add(nextSymbol);
-                        } else if (nextSymbol != null) {
-                            Set<String> firstNext = new HashSet<>(firstSets.get(nextSymbol));
-                            firstNext.remove(EPSILON);
-                            followSet.addAll(firstNext);
-                        }
+                        if (nextSymbol == null) {
+                            if (followSets.containsKey(otherNonTerminal)) {
+                                followSet.addAll(followSets.get(otherNonTerminal));
+                            }
+                        } else {
+                            if (isTerminal(nextSymbol)) {
+                                followSet.add(nextSymbol);
+                            } else {
+                                int current = i + 1;
+                                Set<String> firstNext = new HashSet<>(firstSets.get(nextSymbol));
+                                while (firstNext.contains(EPSILON)) {
+                                    firstNext.remove(EPSILON);
+                                    followSet.addAll(firstNext);
 
-                        if (nextSymbol == null || production.subList(i + 1, production.size()).stream()
-                                .allMatch(s -> firstSets.get(s).contains(EPSILON))) {
-                            followSet.addAll(followSets.get(otherNonTerminal));
+                                    nextSymbol = (current + 1 < production.size()) ? production.get(current + 1) : null;
+                                    if (nextSymbol == null) {
+                                        followSet.addAll(followSets.get(otherNonTerminal));
+                                        break;
+                                    } else if (isTerminal(nextSymbol)) {
+                                        followSet.add(nextSymbol);
+                                        break;
+                                    }
+                                    firstNext = new HashSet<>(firstSets.get(nextSymbol));
+                                }
+                            }
                         }
                     }
                 }
@@ -98,7 +112,7 @@ public class FirstFollowSets {
 
     public static void main(String[] args) {
         // Example grammar
-        Map<String, List<List<String>>> grammar = new HashMap<>();
+        Map<String, List<List<String>>> grammar = new LinkedHashMap<>();
         grammar.put("E", List.of(Arrays.asList("T", "E'")));
         grammar.put("E'", Arrays.asList(Arrays.asList("+", "T", "E'"),
                 Arrays.asList("-", "T", "E'"),
