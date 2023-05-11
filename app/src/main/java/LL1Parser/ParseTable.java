@@ -7,7 +7,7 @@ public class ParseTable {
     private Map<String, Set<String>> firstSets;
     private Map<String, Set<String>> followSets;
     private Map<String, List<List<String>>> grammar;
-    private Map<String, Map<String, List<String>>> parseTable;
+    private static Map<String, Map<String, List<String>>> parseTable;
 
     public ParseTable(Map<String, Set<String>> firstSets, Map<String, Set<String>> followSets,
                       Map<String, List<List<String>>> grammar) {
@@ -49,6 +49,37 @@ public class ParseTable {
         }
     }
 
+    public static boolean parse(String input, Map<String, Map<String, List<String>>> parseTable, String startSymbol) {
+        Stack<String> stack = new Stack<>();
+        stack.push("$");
+        stack.push(startSymbol);
+
+        int i = 0;
+        while (!stack.isEmpty()) {
+            String top = stack.peek();
+            if (top.equals("$") && i == input.length()) {
+                return true;
+            } else if (top.equals(input.charAt(i) + "")) {
+                stack.pop();
+                i++;
+            } else if (parseTable.containsKey(top) && parseTable.get(top).containsKey(input.charAt(i) + "")) {
+                stack.pop();
+                List<String> production = parseTable.get(top).get(input.charAt(i) + "");
+                for (int j = production.size() - 1; j >= 0; j--) {
+                    if (!production.get(j).equals("epsilon")) {
+                        stack.push(production.get(j));
+                    }
+                }
+            } else {
+                return false;
+            }
+        }
+
+        return false;
+    }
+
+
+
     public static void main(String[] args) {
         // Sample first and follow sets
         Map<String, Set<String>> firstSets = new HashMap<>();
@@ -79,9 +110,10 @@ public class ParseTable {
                 Collections.singletonList("id"),
                 Collections.singletonList("num")));
 
-        ParseTable parseTable = new ParseTable(firstSets, followSets, productions);
-        parseTable.generateParseTable();
-        parseTable.printParseTable();
+        ParseTable c = new ParseTable(firstSets, followSets, productions);
+        c.generateParseTable();
+
+        System.out.println(parse("1+1", parseTable, "E"));
     }
 }
 
