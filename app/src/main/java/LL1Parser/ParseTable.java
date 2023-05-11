@@ -1,13 +1,13 @@
 package LL1Parser;
 
 import java.util.*;
-import static LL1Parser.FirstFollowSets.*;
+
 public class ParseTable {
 
     private Map<String, Set<String>> firstSets;
     private Map<String, Set<String>> followSets;
     private Map<String, List<List<String>>> grammar;
-    private Map<String, Map<String, List<String>>> parseTable;
+    private static Map<String, Map<String, List<String>>> parseTable;
 
     public ParseTable(Map<String, Set<String>> firstSets, Map<String, Set<String>> followSets,
                       Map<String, List<List<String>>> grammar) {
@@ -49,10 +49,55 @@ public class ParseTable {
         }
     }
 
-    public static void main(String[] args) {
-        // Sample productions/grammars
+    public static boolean parse(String input, Map<String, Map<String, List<String>>> parseTable, String startSymbol) {
+        Stack<String> stack = new Stack<>();
+        stack.push("$");
+        stack.push(startSymbol);
 
-        Map<String, List<List<String>>> productions = new LinkedHashMap<>();
+        int i = 0;
+        while (!stack.isEmpty()) {
+            String top = stack.peek();
+            if (top.equals("$") && i == input.length()) {
+                return true;
+            } else if (top.equals(input.charAt(i) + "")) {
+                stack.pop();
+                i++;
+            } else if (parseTable.containsKey(top) && parseTable.get(top).containsKey(input.charAt(i) + "")) {
+                stack.pop();
+                List<String> production = parseTable.get(top).get(input.charAt(i) + "");
+                for (int j = production.size() - 1; j >= 0; j--) {
+                    if (!production.get(j).equals("epsilon")) {
+                        stack.push(production.get(j));
+                    }
+                }
+            } else {
+                return false;
+            }
+        }
+
+        return false;
+    }
+
+
+
+    public static void main(String[] args) {
+        // Sample first and follow sets
+        Map<String, Set<String>> firstSets = new HashMap<>();
+        firstSets.put("E", Set.of("num", "(", "id"));
+        firstSets.put("E'", Set.of("epsilon", "+", "-"));
+        firstSets.put("T", Set.of("num", "(", "id"));
+        firstSets.put("T'", Set.of("epsilon", "*", "/"));
+        firstSets.put("F", Set.of("num", "(", "id"));
+
+        Map<String, Set<String>> followSets = new HashMap<>();
+        followSets.put("E", Set.of("$", ")"));
+        followSets.put("E'", Set.of("$", ")"));
+        followSets.put("T", Set.of("$", ")", "+", "-"));
+        followSets.put("T'", Set.of("$", ")", "+", "-"));
+        followSets.put("F", Set.of("$", ")", "*", "+", "-", "/"));
+
+        // Sample production rules
+        Map<String, List<List<String>>> productions = new HashMap<>();
         productions.put("E", List.of(Arrays.asList("T", "E'")));
         productions.put("E'", Arrays.asList(Arrays.asList("+", "T", "E'"),
                 Arrays.asList("-", "T", "E'"),
@@ -65,18 +110,10 @@ public class ParseTable {
                 Collections.singletonList("id"),
                 Collections.singletonList("num")));
 
-        String startSymbol = "E";
+        ParseTable c = new ParseTable(firstSets, followSets, productions);
+        c.generateParseTable();
 
-        // Calculate FIRST sets
-        Map<String, Set<String>> firstSets = calculateFirstSets(productions);
-
-        // Calculate FOLLOW sets
-        Map<String, Set<String>> followSets = calculateFollowSets(productions, startSymbol);
-
-
-
-        ParseTable parseTable = new ParseTable(firstSets, followSets, productions);
-        parseTable.generateParseTable();
-        parseTable.printParseTable();
+        System.out.println(parse("1+1", parseTable, "E"));
     }
 }
+
