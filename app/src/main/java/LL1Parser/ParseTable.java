@@ -1,7 +1,7 @@
 package LL1Parser;
 
 import java.util.*;
-
+import static LL1Parser.FirstFollowSets.*;
 public class ParseTable {
 
     private Map<String, Set<String>> firstSets;
@@ -118,23 +118,9 @@ public class ParseTable {
 
 
     public static void main(String[] args) {
-        // Sample first and follow sets
-        Map<String, Set<String>> firstSets = new HashMap<>();
-        firstSets.put("E", Set.of("num", "(", "id"));
-        firstSets.put("E'", Set.of("epsilon", "+", "-"));
-        firstSets.put("T", Set.of("num", "(", "id"));
-        firstSets.put("T'", Set.of("epsilon", "*", "/"));
-        firstSets.put("F", Set.of("num", "(", "id"));
-
-        Map<String, Set<String>> followSets = new HashMap<>();
-        followSets.put("E", Set.of("$", ")"));
-        followSets.put("E'", Set.of("$", ")"));
-        followSets.put("T", Set.of("$", ")", "+", "-"));
-        followSets.put("T'", Set.of("$", ")", "+", "-"));
-        followSets.put("F", Set.of("$", ")", "*", "+", "-", "/"));
 
         // Sample production rules
-        Map<String, List<List<String>>> productions = new HashMap<>();
+        Map<String, List<List<String>>> productions = new LinkedHashMap<>();
         productions.put("E", List.of(Arrays.asList("T", "E'")));
         productions.put("E'", Arrays.asList(Arrays.asList("+", "T", "E'"),
                 Arrays.asList("-", "T", "E'"),
@@ -146,6 +132,15 @@ public class ParseTable {
         productions.put("F", Arrays.asList(Arrays.asList("(", "E", ")"),
                 Collections.singletonList("id"),
                 Collections.singletonList("num")));
+
+        // Sample first and follow sets
+        String startSymbol = "E";
+
+        // Calculate FIRST sets
+        Map<String, Set<String>> firstSets = calculateFirstSets(productions);
+
+        // Calculate FOLLOW sets
+        Map<String, Set<String>> followSets = calculateFollowSets(productions, startSymbol);
 
         ParseTable c = new ParseTable(firstSets, followSets, productions);
         c.generateParseTable();
