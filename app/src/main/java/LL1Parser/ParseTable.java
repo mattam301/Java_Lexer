@@ -78,6 +78,43 @@ public class ParseTable {
         return false;
     }
 
+    public static boolean parse2(String input, Map<String, Map<String, List<String>>> parseTable, String startSymbol) {
+        input += '$';
+        Stack<String> stack = new Stack<>();
+        stack.push("$");
+        stack.push(startSymbol);
+
+        int i = 0;
+        while (!stack.isEmpty()) {
+            String top = stack.peek();
+            if (top.equals("$") && i == input.length()) {
+                return true;
+            }
+
+            String current = input.charAt(i) + "";
+            if (current.equals('1' + "")) {
+                current = "num";
+            }
+            while (!top.equals(current)) {
+                if (!parseTable.get(top).containsKey(current)) {
+                    return false;
+                }
+
+                stack.pop();
+                List<String> production = parseTable.get(top).get(current);
+                for (int j = production.size() - 1; j >= 0; j--) {
+                    if (!production.get(j).equals("epsilon")) {
+                        stack.push(production.get(j));
+                    }
+                }
+                top = stack.peek();
+            }
+            stack.pop();
+            i++;
+        }
+        return true;
+    }
+
 
 
     public static void main(String[] args) {
@@ -113,7 +150,7 @@ public class ParseTable {
         ParseTable c = new ParseTable(firstSets, followSets, productions);
         c.generateParseTable();
 
-        System.out.println(parse("1+1", parseTable, "E"));
+        System.out.println(parse2("1+1", parseTable, "E"));
     }
 }
 
