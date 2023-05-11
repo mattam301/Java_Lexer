@@ -49,10 +49,35 @@ public class ParseTable {
         }
     }
 
+    public static String tokenize(String input) {
+        StringBuilder tokenizedInput = new StringBuilder();
+        int i = 0;
+        while (i < input.length()) {
+            char c = input.charAt(i);
+            if (Character.isDigit(c)) {
+                tokenizedInput.append("num ");
+                while (i < input.length() && Character.isDigit(input.charAt(i))) {
+                    i++;
+                }
+            } else if (Character.isLetter(c)) {
+                tokenizedInput.append("id ");
+                while (i < input.length() && Character.isLetter(input.charAt(i))) {
+                    i++;
+                }
+            } else {
+                tokenizedInput.append(c).append(" ");
+                i++;
+            }
+        }
+        return tokenizedInput.toString().trim();
+    }
+
     public static boolean parse(String input, Map<String, Map<String, List<String>>> parseTable, String startSymbol) {
         Stack<String> stack = new Stack<>();
         stack.push("$");
         stack.push(startSymbol);
+
+        List<String> in = Collections.singletonList(tokenize(input));
 
         int i = 0;
         while (!stack.isEmpty()) {
@@ -84,6 +109,9 @@ public class ParseTable {
         stack.push("$");
         stack.push(startSymbol);
 
+        input = tokenize(input);
+        String[] tokens = input.split("\\s+");
+
         int i = 0;
         while (!stack.isEmpty()) {
             String top = stack.peek();
@@ -91,10 +119,8 @@ public class ParseTable {
                 return true;
             }
 
-            String current = input.charAt(i) + "";
-            if (current.equals('1' + "")) {
-                current = "num";
-            }
+            String current = tokens[i];
+
             while (!top.equals(current)) {
                 if (!parseTable.get(top).containsKey(current)) {
                     return false;
@@ -145,7 +171,7 @@ public class ParseTable {
         ParseTable c = new ParseTable(firstSets, followSets, productions);
         c.generateParseTable();
 
-        System.out.println(parse2("1+1", parseTable, "E"));
+        System.out.println(parse2("1+2/6", parseTable, "E"));
     }
 }
 
