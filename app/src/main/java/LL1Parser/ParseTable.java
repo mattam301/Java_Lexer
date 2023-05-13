@@ -230,7 +230,7 @@ public class ParseTable {
 
 
     public static void main(String[] args) {
-        ParseTable parseTable = new ParseTable("app/src/main/resources/grammar2.dat");
+        ParseTable parseTable = new ParseTable("app/src/main/resources/grammar.dat");
 
         // Sample production rules
 //        Map<String, List<List<String>>> grammar = new LinkedHashMap<>();

@@ -1,370 +1,445 @@
-<grammar>
-  <terminals>
-    <terminal>(</terminal>
-    <terminal>)</terminal>
-    <terminal>{</terminal>
-    <terminal>}</terminal>
-    <terminal>*</terminal>
-    <terminal>+</terminal>
-    <terminal>-</terminal>
-    <terminal>/</terminal>
-    <terminal>%</terminal>
-    <terminal>,</terminal>
-    <terminal>lesser</terminal>
-    <terminal>greater</terminal>
-    <terminal><=</terminal>
-    <terminal>>=</terminal>
-    <terminal>=</terminal>
-    <terminal>==</terminal>
-    <terminal>!</terminal>
-    <terminal>!=</terminal>
-    <terminal>;</terminal>
-    <terminal>[</terminal>
-    <terminal>]</terminal>
-    <terminal>identifier</terminal>
-    <terminal>integer_constant</terminal>
-    <terminal>float_constant</terminal>
-    <terminal>boolean_constant</terminal>
-    <terminal>string_constant</terminal>
-    <terminal>for</terminal>
-    <terminal>while</terminal>
-    <terminal>break</terminal>
-    <terminal>continue</terminal>
-    <terminal>return</terminal>
-    <terminal>else</terminal>
-    <terminal>float</terminal>
-    <terminal>if</terminal>
-    <terminal>int</terminal>
-    <terminal>void</terminal>
-    <terminal>boolean</terminal>
-  </terminals>
+{
+  "TERMINAL": [
+    "(", ")", "{", "}", "*", "+", "-", "/", "%", ",", "<", ">", "<=", ">=", "=", "==", "!", "!=", ";", "[", "]",
+    "identifier", "integer_constant", "float_constant", "boolean_constant", "string_constant",
+    "for", "while", "break", "continue", "return", "else", "float", "if", "int", "void", "boolean"
+  ],
 
-  <nonterminals>
-    <nonterminal>primary_expression</nonterminal>
-    <nonterminal>constant</nonterminal>
-    <nonterminal>unary_operator</nonterminal>
-    <nonterminal>unary_expression</nonterminal>
-    <nonterminal>type_specifier</nonterminal>
-    <nonterminal>multiplicative_expression</nonterminal>
-    <nonterminal>additive_expression</nonterminal>
-    <nonterminal>relational_expression</nonterminal>
-    <nonterminal>equality_expression</nonterminal>
-    <nonterminal>assignment_expression</nonterminal>
-    <nonterminal>expression</nonterminal>
-    <nonterminal>declarator_tail</nonterminal>
-    <nonterminal>declaration</nonterminal>
-    <nonterminal>init_declarator_list</nonterminal>
-    <nonterminal>init_declarator</nonterminal>
-    <nonterminal>initializer</nonterminal>
-    <nonterminal>declarator</nonterminal>
-    <nonterminal>direct_declarator</nonterminal>
-    <nonterminal>declarator_int</nonterminal>
-    <nonterminal>statement</nonterminal>
-    <nonterminal>compound_statement</nonterminal>
-    <nonterminal>block_item_list</nonterminal>
-    <nonterminal>block_item</nonterminal>
-    <nonterminal>expression_statement</nonterminal>
-    <nonterminal>selection_statement</nonterminal>
-    <nonterminal>program</nonterminal>
-    <nonterminal>primary_expression_tail</nonterminal>
-    <nonterminal>for_statement</nonterminal>
-    <nonterminal>while_statement</nonterminal>
-    <nonterminal>expression_question</nonterminal>
-    <nonterminal>break_statement</nonterminal>
-    <nonterminal>continue_statement</nonterminal
-    <nonterminal>return_statement</nonterminal>
-    <nonterminal>argument_list</nonterminal>
-    <nonterminal>argument</nonterminal>
-    <nonterminal>parameter_list</nonterminal>
-    <nonterminal>parameter</nonterminal>
-    <nonterminal>argument_list_temp</nonterminal>
-    <nonterminal>assignment_expression_temp</nonterminal>
-    <nonterminal>multiplicative_expression_temp</nonterminal>
-    <nonterminal>init_declarator_list_temp</nonterminal>
-    <nonterminal>relational_expression_temp</nonterminal>
-    <nonterminal>equality_expression_temp</nonterminal>
-    <nonterminal>init_declarator_temp</nonterminal>
-    <nonterminal>parameter_list_temp</nonterminal>
-    <nonterminal>additive_expression_temp</nonterminal>
-    <nonterminal>selection_statement_temp</nonterminal>
-    <nonterminal>block_item_list_temp</nonterminal>
-    <nonterminal>parameter_list_question</nonterminal>
-    <nonterminal>argument_list_question</nonterminal>
-  </nonterminals>
+  "NON_TERMINAL": [
+    "<primary_expression>", "<constant>", "<unary_operator>", "<unary_expression>", "<type_specifier>",
+    "<multiplicative_expression>", "<additive_expression>", "<relational_expression>", "<equality_expression>",
+    "<assignment_expression>", "<expression>", "<declarator_tail>", "<declaration>", "<init_declarator_list>",
+    "<init_declarator>", "<initializer>", "<declarator>", "<direct_declarator>", "<declarator_int>", "<statement>",
+    "<compound_statement>", "<block_item_list>", "<block_item>", "<expression_statement>", "<selection_statement>",
+    "<program>", "<primary_expression_tail>", "<for_statement>", "<while_statement>", "<expression_question>",
+    "<break_statement>", "<continue_statement>", "<return_statement>", "<argument_list>", "<argument>",
+    "<parameter_list>", "<parameter>", "<argument_list_temp>", "<assignment_expression_temp>",
+    "<multiplicative_expression_temp>", "<init_declarator_list_temp>", "<relational_expression_temp>",
+    "<equality_expression_temp>", "<init_declarator_temp>", "<parameter_list_temp>",
+    "<additive_expression_temp>", "<selection_statement_temp>", "<block_item_list_temp>",
+    "<parameter_list_question>", "<argument_list_question>"
+  ],
+  
+  "START": "<program>",
 
-  <start>program</start>
+  "RULES": [
+    {
+      "left": "<program>",
+      "right": ["<type_specifier>", "identifier", "(", "<parameter_list_question>", ")", "<compound_statement>"]
+    },
 
-  <rules>
-    <rule>
-      <left>program</left>
-      <right>type_specifier identifier ( parameter_list_question ) compound_statement</right>
-    </rule>
-    <rule>
-      <left>parameter</left>
-      <right>type_specifier declarator</right>
-    </rule>
-    <rule>
-      <left>parameter_list_temp</left>
-      <right>, parameter parameter_list_temp</right>
-      <right>EPSILON</right>
-    </rule>
-    <rule>
-      <left>parameter_list</left>
-      <right>parameter parameter_list_temp</right>
-      <right>parameter_list_temp</right>
-    </rule>
-    <rule>
-      <left>parameter_list_question</left>
-      <right>parameter_list</right>
-      <right>EPSILON</right>
-    </rule>
+    {
+      "left": "<parameter>",
+      "right": ["<type_specifier>", "<declarator>"]
+    },
+    {
+      "left": "<parameter_list_temp>",
+      "right": [",", "<parameter>", "<parameter_list_temp>"]
+    },
+    {
+      "left": "<parameter_list_temp>",
+      "right": ["EPSILON"]
+    },
+    {
+      "left": "<parameter_list>",
+      "right": ["<parameter>", "<parameter_list_temp>"]
+    },
+    {
+      "left": "<parameter_list>",
+      "right": ["<parameter_list_temp>"]
+    },
+    {
+      "left": "<parameter_list_question>",
+      "right": ["<parameter_list>"]
+    },
+    {
+      "left": "<parameter_list_question>",
+      "right": ["EPSILON"]
+    },
 
-    <rule>
-      <left>argument</left>
-      <right>expression</right>
-    </rule>
-    <rule>
-      <left>argument_list_temp</left>
-      <right>, argument argument_list_temp</right>
-      <right>EPSILON</right>
-    </rule>
-    <rule>
-      <left>argument_list</left>
-      <right>argument argument_list_temp</right>
-      <right>argument_list_temp</right>
-    </rule>
-    <rule>
-      <left>argument_list_question</left>
-      <right>argument_list</right>
-      <right>EPSILON</right>
-    </rule>
+    {
+      "left": "<argument>",
+      "right": ["<expression>"]
+    },
+    {
+      "left": "<argument_list_temp>",
+      "right": [",", "<argument>", "<argument_list_temp>"]
+    },
+    {
+      "left": "<argument_list_temp>",
+      "right": ["EPSILON"]
+    },
+    {
+      "left": "<argument_list>",
+      "right": ["<argument>", "<argument_list_temp>"]
+    },
+    {
+      "left": "<argument_list>",
+      "right": ["<argument_list_temp>"]
+    },
+    {
+      "left": "<argument_list_question>",
+      "right": ["<argument_list>"]
+    },
+    {
+      "left": "<argument_list_question>",
+      "right": ["EPSILON"]
+    },
 
-    <rule>
-      <left>declaration</left>
-      <right>type_specifier init_declarator_list ;</right>
-    </rule>
-    <rule>
-      <left>init_declarator_list_temp</left>
-      <right>, init_declarator init_declarator_list_temp</right>
-      <right>EPSILON</right>
-    </rule>
-    <rule>
-      <left>init_declarator_list</left>
-      <right>init_declarator init_declarator_list_temp</right>
-      <right>init_declarator_list_temp</right>
-    </rule>
-    <rule>
-      <left>init_declarator</left>
-      <right>declarator init_declarator_temp</right>
-    </rule>
-    <rule>
-      <left>init_declarator_temp</left>
-      <right>EPSILON</right>
-      <right>= initializer</right>
-    </rule>
-    <rule>
-      <left>type_specifier</left>
-      <right>void</right>
-      <right>int</right>
-      <right>float</right>
-      <right>boolean</right>
-    </rule>
-    <rule>
-      <left>declarator_tail</left>
-      <right>[ declarator_int ]</right>
-      <right>EPSILON</right>
-    </rule>
-    <rule>
-      <left>declarator_int</left>
-      <right>integer_constant</right>
-      <right>EPSILON</right>
-    </rule>
-    <rule>
-      <left>declarator</left>
-      <right>direct_declarator declarator_tail</right>
-    </rule>
-    <rule>
-      <left>direct_declarator</left>
-      <right>identifier</right>
-      <right>( declarator )</right>
-    </rule>
-    <rule>
-      <left>initializer</left>
-      <right>expression</right>
-    </rule>
+    {
+      "left": "<declaration>",
+      "right": ["<type_specifier>", "<init_declarator_list>", ";"]
+    },
+    {
+      "left": "<init_declarator_list_temp>",
+      "right": [",", "<init_declarator>", "<init_declarator_list_temp>"]
+    },
+    {
+      "left": "<init_declarator_list_temp>",
+      "right": ["EPSILON"]
+    },
+    {
+      "left": "<init_declarator_list>",
+      "right": ["<init_declarator>", "<init_declarator_list_temp>"]
+    },
+    {
+      "left": "<init_declarator_list>",
+      "right": ["<init_declarator_list_temp>"]
+    },
+    {
+      "left": "<init_declarator>",
+      "right": ["<declarator>", "<init_declarator_temp>"]
+    },
+    {
+      "left": "<init_declarator_temp>",
+      "right": ["EPSILON"]
+    },
+    {
+      "left": "<init_declarator_temp>",
+      "right": ["=", "<initializer>"]
+    },
+    {
+      "left": "<type_specifier>",
+      "right": ["void"]
+    },
+    {
+      "left": "<type_specifier>",
+      "right": ["int"]
+    },
+    {
+      "left": "<type_specifier>",
+      "right": ["float"]
+    },
+    {
+      "left": "<type_specifier>",
+      "right": ["boolean"]
+    },
+    {
+      "left": "<declarator_tail>",
+      "right": ["[", "<declarator_int>", "]"]
+    },
+    {
+      "left": "<declarator_tail>",
+      "right": ["EPSILON"]
+    },
+    {
+      "left": "<declarator_int>",
+      "right": ["integer_constant"]
+    },
+    {
+      "left": "<declarator_int>",
+      "right": ["EPSILON"]
+    },
+    {
+      "left": "<declarator>",
+      "right": ["<direct_declarator>", "<declarator_tail>"]
+    },
+    {
+      "left": "<direct_declarator>",
+      "right": ["identifier"]
+    },
+    {
+      "left": "<direct_declarator>",
+      "right": ["(", "<declarator>", ")"]
+    },
 
-    <rule>
-      <left>primary_expression_tail</left>
-      <right>[ expression ]</right>
-      <right>( argument_list_question )</right>
-      <right>EPSILON</right>
-    </rule>
-    <rule>
-      <left>primary_expression</left>
-      <right>identifier primary_expression_tail</right>
-      <right>constant</right>
-      <right>( expression )</right>
-    </rule>
+    {
+      "left": "<initializer>",
+      "right": ["<expression>"]
+    },
 
-    <rule>
-      <left>constant</left>
-      <right>integer_constant</right>
-      <right>float_constant</right>
-      <right>boolean_constant</right>
-      <right>string_constant</right>
-    </rule>
+    {
+      "left": "<primary_expression_tail>",
+      "right": ["[", "<expression>", "]"]
+    },
+    {
+      "left": "<primary_expression_tail>",
+      "right": ["(", "<argument_list_question>", ")"]
+    },
+    {
+      "left": "<primary_expression_tail>",
+      "right": ["EPSILON"]
+    },
+    {
+      "left": "<primary_expression>",
+      "right": ["identifier", "<primary_expression_tail>"]
+    },
+    {
+      "left": "<primary_expression>",
+      "right": ["<constant>"]
+    },
+    {
+      "left": "<primary_expression>",
+      "right": ["(", "<expression>", ")"]
+    },
 
-    <rule>
-      <left>unary_operator</left>
-      <right>+</right>
-      <right>-</right>
-      <right>!</right>
-    </rule>
-    <rule>
-      <left>unary_expression</left>
-      <right>primary_expression</right>
-      <right>unary_operator primary_expression</right>
-    </rule>
+    {
+      "left": "<constant>",
+      "right": ["integer_constant"]
+    },
+    {
+      "left": "<constant>",
+      "right": ["float_constant"]
+    },
+    {
+      "left": "<constant>",
+      "right": ["boolean_constant"]
+    },
+    {
+      "left": "<constant>",
+      "right": ["string_constant"]
+    },
 
-    <rule>
-      <left>multiplicative_expression_temp</left>
-      <right>* unary_expression multiplicative_expression_temp</right>
-      <right>/ unary_expression multiplicative_expression_temp</right>
-      <right>EPSILON</right>
-    </rule>
-    <rule>
-      <left>multiplicative_expression</left>
-      <right>unary_expression multiplicative_expression_temp</right>
-    </rule>
+    {
+      "left": "<unary_operator>",
+      "right": ["+"]
+    },
+    {
+      "left": "<unary_operator>",
+      "right": ["-"]
+    },
+    {
+      "left": "<unary_operator>",
+      "right": ["!"]
+    },
+    {
+      "left": "<unary_expression>",
+      "right": ["<primary_expression>"]
+    },
+    {
+      "left": "<unary_expression>",
+      "right": ["<unary_operator>", "<primary_expression>"]
+    },
 
-    <rule>
-      <left>additive_expression_temp</left>
-      <right>+ multiplicative_expression additive_expression_temp</right>
-      <right>- multiplicative_expression additive_expression_temp</right>
-      <right>EPSILON</right>
-    </rule>
-    <rule>
-      <left>additive_expression</left>
-      <right>multiplicative_expression additive_expression_temp</right>
-    </rule>
+    {
+      "left": "<multiplicative_expression_temp>",
+      "right": ["*", "<unary_expression>", "<multiplicative_expression_temp>"]
+    },
+    {
+      "left": "<multiplicative_expression_temp>",
+      "right": ["/", "<unary_expression>", "<multiplicative_expression_temp>"]
+    },
+    {
+      "left": "<multiplicative_expression_temp>",
+      "right": ["EPSILON"]
+    },
+    {
+      "left": "<multiplicative_expression>",
+      "right": ["<unary_expression>", "<multiplicative_expression_temp>"]
+    },
 
-    <rule>
-      <left>relational_expression_temp</left>
-      <right>< additive_expression relational_expression_temp</right>
-      <right>> additive_expression relational_expression_temp</right>
-      <right><= additive_expression relational_expression_temp</right>
-      <right>>= additive_expression relational_expression_temp</right>
-      <right>EPSILON</right>
-    </rule>
-    <rule>
-      <left>relational_expression</left>
-      <right>additive_expression relational_expression_temp</right>
-    </rule>
+    {
+      "left": "<additive_expression_temp>",
+      "right": ["+", "<multiplicative_expression>", "<additive_expression_temp>"]
+    },
+    {
+      "left": "<additive_expression_temp>",
+      "right": ["-", "<multiplicative_expression>", "<additive_expression_temp>"]
+    },
+    {
+      "left": "<additive_expression_temp>",
+      "right": ["EPSILON"]
+    },
+    {
+      "left": "<additive_expression>",
+      "right": ["<multiplicative_expression>", "<additive_expression_temp>"]
+    },
 
-    <rule>
-      <left>equality_expression_temp</left>
-      <right>== relational_expression equality_expression_temp</right>
-      <right>!= relational_expression equality_expression_temp</right>
-      <right>EPSILON</right>
-    </rule>
-    <rule>
-      <left>equality_expression</left>
-      <right>relational_expression equality_expression_temp</right>
-    </rule>
+    {
+      "left": "<relational_expression_temp>",
+      "right": ["<", "<additive_expression>", "<relational_expression_temp>"]
+    },
+    {
+      "left": "<relational_expression_temp>",
+      "right": [">", "<additive_expression>", "<relational_expression_temp>"]
+    },
+    {
+      "left": "<relational_expression_temp>",
+      "right": ["<=", "<additive_expression>", "<relational_expression_temp>"]
+    },
+    {
+      "left": "<relational_expression_temp>",
+      "right": [">=", "<additive_expression>", "<relational_expression_temp>"]
+    },
+    {
+      "left": "<relational_expression_temp>",
+      "right": ["EPSILON"]
+    },
+    {
+      "left": "<relational_expression>",
+      "right": ["<additive_expression>", "<relational_expression_temp>"]
+    },
 
-    <rule>
-      <left>assignment_expression_temp</left>
-      <right>= equality_expression assignment_expression_temp</right>
-      <right>EPSILON</right>
-    </rule>
-    <rule>
-      <left>assignment_expression</left>
-      <right>equality_expression assignment_expression_temp</right>
-    </rule>
+    {
+      "left": "<equality_expression_temp>",
+      "right": ["==", "<relational_expression>", "<equality_expression_temp>"]
+    },
+    {
+      "left": "<equality_expression_temp>",
+      "right": ["!=", "<relational_expression>", "<equality_expression_temp>"]
+    },
+    {
+      "left": "<equality_expression_temp>",
+      "right": ["EPSILON"]
+    },
+    {
+      "left": "<equality_expression>",
+      "right": ["<relational_expression>", "<equality_expression_temp>"]
+    },
 
-    <rule>
-      <left>expression</left>
-      <right>assignment_expression</right>
-    </rule>
+    {
+      "left": "<assignment_expression_temp>",
+      "right": ["=", "<equality_expression>", "<assignment_expression_temp>"]
+    },
+    {
+      "left": "<assignment_expression_temp>",
+      "right": ["EPSILON"]
+    },
+    {
+      "left": "<assignment_expression>",
+      "right": ["<equality_expression>", "<assignment_expression_temp>"]
+    },
 
-    <rule>
-      <left>expression_question</left>
-      <right>expression</right>
-      <right>EPSILON</right>
-    </rule>
+    {
+      "left": "<expression>",
+      "right": ["<assignment_expression>"]
+    },
+    {
+      "left": "<expression_question>",
+      "right": ["<expression>"]
+    },
+    {
+      "left": "<expression_question>",
+      "right": ["EPSILON"]
+    },
 
-    <rule>
-      <left>statement</left>
-      <right>compound_statement</right>
-      <right>expression_statement</right>
-      <right>selection_statement</right>
-      <right>for_statement</right>
-      <right>while_statement</right>
-      <right>break_statement</right>
-      <right>continue_statement</right>
-      <right>return_statement</right>
-    </rule>
+    {
+      "left": "<statement>",
+      "right": ["<compound_statement>"]
+    },
+    {
+      "left": "<statement>",
+      "right": ["<expression_statement>"]
+    },
+    {
+      "left": "<statement>",
+      "right": ["<selection_statement>"]
+    },
+    {
+      "left": "<statement>",
+      "right": ["<for_statement>"]
+    },
+    {
+      "left": "<statement>",
+      "right": ["<while_statement>"]
+    },
+    {
+      "left": "<statement>",
+      "right": ["<break_statement>"]
+    },
+    {
+      "left": "<statement>",
+      "right": ["<continue_statement>"]
+    },
+    {
+      "left": "<statement>",
+      "right": ["<return_statement>"]
+    },
 
-    <rule>
-      <left>compound_statement</left>
-      <right>{ block_item_list }</right>
-    </rule>
-    <rule>
-      <left>block_item</left>
-      <right>declaration</right>
-      <right>statement</right>
-    </rule>
-    <rule>
-      <left>block_item_list</left>
-      <right>block_item block_item_list_temp</right>
-      <right>EPSILON</right>
-    </rule>
-    <rule>
-      <left>block_item_list_temp</left>
-      <right>EPSILON</right>
-      <right>block_item_list</right>
-    </rule>
+    {
+      "left": "<compound_statement>",
+      "right": ["{", "<block_item_list>", "}"]
+    },
+    {
+      "left": "<block_item>",
+      "right": ["<declaration>"]
+    },
+    {
+      "left": "<block_item>",
+      "right": ["<statement>"]
+    },
+    {
+      "left": "<block_item_list>",
+      "right": ["<block_item>", "<block_item_list_temp>"]
+    },
+    {
+      "left": "<block_item_list>",
+      "right": ["EPSILON"]
+    },
+    {
+      "left": "<block_item_list_temp>",
+      "right": ["EPSILON"]
+    },
+    {
+      "left": "<block_item_list_temp>",
+      "right": ["<block_item_list>"]
+    },
 
-    <rule>
-      <left>expression_statement</left>
-      <right>expression ;</right>
-      <right>;</right>
-    </rule>
+    {
+      "left": "<expression_statement>",
+      "right": ["<expression>", ";"]
+    },
+    {
+      "left": "<expression_statement>",
+      "right": [";"]
+    },
 
-    <rule>
-      <left>return_statement</left>
-      <right>return expression_question ;</right>
-    </rule>
+    {
+      "left": "<return_statement>",
+      "right": ["return", "<expression_question>", ";"]
+    },
 
-    <rule>
-      <left>continue_statement</left>
-      <right>continue ;</right>
-    </rule>
+    {
+      "left": "<continue_statement>",
+      "right": ["continue", ";"]
+    },
 
-    <rule>
-      <left>break_statement</left>
-      <right>break ;</right>
-    </rule>
+    {
+      "left": "<break_statement>",
+      "right": ["break", ";"]
+    },
 
-    <rule>
-      <left>selection_statement</left>
-      <right>if ( expression ) compound_statement selection_statement_temp</right>
-    </rule>
-    <rule>
-      <left>selection_statement_temp</left>
-      <right>EPSILON</right>
-      <right>else statement</right>
-    </rule>
+    {
+      "left": "<selection_statement>",
+      "right": ["if", "(", "<expression>", ")", "<compound_statement>", "<selection_statement_temp>"]
+    },
+    {
+      "left": "<selection_statement_temp>",
+      "right": ["EPSILON"]
+    },
+    {
+      "left": "<selection_statement_temp>",
+      "right": ["else", "<statement>"]
+    },
 
-    <rule>
-      <left>for_statement</left>
-      <right>for ( expression_question ; expression_question ; expression_question ) statement</right>
-    </rule>
+    {
+      "left": "<for_statement>",
+      "right": ["for", "(", "<expression_question>", ";", "<expression_question>", ";", "<expression_question>", ")", "<statement>"]
+    },
 
-    <rule>
-      <left>while_statement</left>
-      <right>while ( expression ) statement</right>
-    </rule>
-</grammar>
-
-
+    {
+      "left": "<while_statement>",
+      "right": ["while", "(", "<expression>", ")", "<statement>"]
+    }
+  ]
+}
