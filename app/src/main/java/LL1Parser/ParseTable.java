@@ -7,14 +7,12 @@ import java.util.*;
 import LL1Parser.model.Grammar;
 import LL1Parser.model.Rules;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.json.simple.*;
-import org.json.simple.parser.*;
 
 public class ParseTable {
 
     private Map<String, Set<String>> firstSets;
     private Map<String, Set<String>> followSets;
-    private Map<String, List<List<String>>> grammar;
+    private final Map<String, List<List<String>>> grammar;
     private static Map<String, Map<String, List<String>>> parseTable;
     private Grammar g;
     private Rules[] rules;
@@ -24,8 +22,6 @@ public class ParseTable {
 
     public ParseTable(String datFile) {
         grammar = new LinkedHashMap<>();
-        terminals = new ArrayList<>();
-        nonTerminals = new ArrayList<>();
 
         ObjectMapper mapper = new ObjectMapper();
         try {
@@ -41,8 +37,7 @@ public class ParseTable {
             if (!grammar.containsKey(rule.getLeft())) {
                 grammar.put(rule.getLeft(), Collections.singletonList(rule.getRight()));
             } else {
-                List<List<String>> newGram = new ArrayList<>();
-                newGram = grammar.get(rule.getLeft());
+                List<List<String>> newGram = grammar.get(rule.getLeft());
                 newGram.add(rule.getRight());
                 grammar.replace(rule.getLeft(), newGram);
             }
@@ -256,7 +251,7 @@ public class ParseTable {
 
 
     public static void main(String[] args) {
-        ParseTable parseTable = new ParseTable("app/src/main/resources/grammar2.dat");
+        ParseTable parseTable = new ParseTable("app/src/main/resources/grammar.dat");
 
         // Sample production rules
 //        Map<String, List<List<String>>> grammar = new LinkedHashMap<>();

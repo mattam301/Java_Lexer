@@ -24,7 +24,7 @@ public class App {
         InputStream dfaStream = App.class.getResourceAsStream("/dfa.dat");
         LexicalScanner scanner = new LexicalScanner(dfaStream);
         for (String vcFile : args) {
-            vcFile = "src/main/resources/" + vcFile;
+            vcFile = "src/main/resources/vc/" + vcFile;
             File file = new File(vcFile);
             if (!file.exists()) {
                 System.out.println("Input file does not exist: " + vcFile);
