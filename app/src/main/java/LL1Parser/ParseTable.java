@@ -6,10 +6,9 @@ import java.util.*;
 
 import LL1Parser.model.Grammar;
 import LL1Parser.model.Rules;
+import LL1Parser.utils.FirstFollowSetsGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import static LL1Parser.utils.FirstFollowSetsUtil.calculateFirstSets;
-import static LL1Parser.utils.FirstFollowSetsUtil.calculateFollowSets;
 
 
 public class ParseTable {
@@ -28,6 +27,7 @@ public class ParseTable {
         grammar = new LinkedHashMap<>();
         terminals = new ArrayList<>();
         nonTerminals = new ArrayList<>();
+        parseTable = new HashMap<>();
 
         ObjectMapper mapper = new ObjectMapper();
         try {
@@ -180,11 +180,12 @@ public class ParseTable {
 
     public static void main(String[] args) {
         ParseTable parseTbl = new ParseTable("app/src/main/resources/grammar2.dat");
-        firstSets = calculateFirstSets(grammar);
-        followSets = calculateFollowSets(grammar, start);
+        FirstFollowSetsGenerator generator = new FirstFollowSetsGenerator(grammar);
+        firstSets = generator.getFirstSets();
+        followSets = generator.getFollowSets();
+
         parseTbl.generateParseTable();
         parseTbl.printParseTable();
-
 
 
     }
