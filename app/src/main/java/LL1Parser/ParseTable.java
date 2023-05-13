@@ -1,18 +1,23 @@
 package LL1Parser;
 
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
+
+import LL1Parser.model.Grammar;
+import LL1Parser.model.Rules;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.simple.*;
 import org.json.simple.parser.*;
 
-import static LL1Parser.FirstFollowSets.*;
 public class ParseTable {
 
     private Map<String, Set<String>> firstSets;
     private Map<String, Set<String>> followSets;
     private Map<String, List<List<String>>> grammar;
     private static Map<String, Map<String, List<String>>> parseTable;
-
+    private Grammar g;
+    private Rules[] rules;
     private List<String> terminals;
     private List<String> nonTerminals;
     private String start;
@@ -22,46 +27,67 @@ public class ParseTable {
         terminals = new ArrayList<>();
         nonTerminals = new ArrayList<>();
 
-        JSONParser parser = new JSONParser();
+        ObjectMapper mapper = new ObjectMapper();
         try {
-            Object obj = parser.parse(new FileReader(datFile));
-            JSONObject jsonObject = (JSONObject)obj;
-
-            // get terminal characters and states
-            JSONArray terminalList = (JSONArray)jsonObject.get("TERMINAL");
-            Iterator iterator = terminalList.iterator();
-            while (iterator.hasNext()) {
-                terminals.add((String) iterator.next());
-            }
-
-            // get non-terminal characters and states
-            JSONArray nonTerminalList = (JSONArray)jsonObject.get("NON_TERMINAL");
-            iterator = nonTerminalList.iterator();
-            while (iterator.hasNext()) {
-                nonTerminals.add((String) iterator.next());
-            }
-
-            // get starting state
-            start = (String)jsonObject.get("START");
-
-            // get rules
-            JSONArray grammarList = (JSONArray)jsonObject.get("RULES");
-            iterator = grammarList.iterator();
-            while (iterator.hasNext()) {
-                JSONObject rule = (JSONObject) iterator.next();
-                String left = (String) rule.get("left");
-                JSONArray right = (JSONArray) rule.get("right");
-
-                if (!grammar.containsKey(left)) {
-                    grammar.put(left, Arrays.asList(right));
-                } else {
-
-                }
-            }
-
-        } catch(Exception e) {
-            e.printStackTrace();
+            g = mapper.readValue(new FileReader(datFile), Grammar.class);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+        terminals = new ArrayList<>(g.getTerminal());
+        nonTerminals = new ArrayList<>(g.getNonTerminal());
+        start = g.getStart();
+        rules = g.getRules();
+        for (Rules rule : rules) {
+            if (!grammar.containsKey(rule.getLeft())) {
+                grammar.put(rule.getLeft(), Collections.singletonList(rule.getRight()));
+            } else {
+                List<List<String>> newGram = new ArrayList<>();
+                newGram = grammar.get(rule.getLeft());
+                newGram.add(rule.getRight());
+                grammar.replace(rule.getLeft(), newGram);
+            }
+        }
+
+//        JSONParser parser = new JSONParser();
+//        try {
+//            Object obj = parser.parse(new FileReader(datFile));
+//            JSONObject jsonObject = (JSONObject)obj;
+//
+//            // get terminal characters and states
+//            JSONArray terminalList = (JSONArray)jsonObject.get("TERMINAL");
+//            Iterator iterator = terminalList.iterator();
+//            while (iterator.hasNext()) {
+//                terminals.add((String) iterator.next());
+//            }
+//
+//            // get non-terminal characters and states
+//            JSONArray nonTerminalList = (JSONArray)jsonObject.get("NON_TERMINAL");
+//            iterator = nonTerminalList.iterator();
+//            while (iterator.hasNext()) {
+//                nonTerminals.add((String) iterator.next());
+//            }
+//
+//            // get starting state
+//            start = (String)jsonObject.get("START");
+//
+//            // get rules
+//            JSONArray grammarList = (JSONArray)jsonObject.get("RULES");
+//            iterator = grammarList.iterator();
+//            while (iterator.hasNext()) {
+//                JSONObject rule = (JSONObject) iterator.next();
+//                String left = (String) rule.get("left");
+//                JSONArray right = (JSONArray) rule.get("right");
+//
+//                if (!grammar.containsKey(left)) {
+//                    grammar.put(left, Arrays.asList(right));
+//                } else {
+//
+//                }
+//            }
+//
+//        } catch(Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
     public ParseTable(Map<String, Set<String>> firstSets, Map<String, Set<String>> followSets,
