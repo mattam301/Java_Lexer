@@ -4,6 +4,7 @@
     "identifier", "integer_constant", "float_constant", "boolean_constant", "string_constant",
     "for", "while", "break", "continue", "return", "else", "float", "if", "int", "void", "boolean"
   ],
+
   "NON_TERMINAL": [
     "<primary_expression>", "<constant>", "<unary_operator>", "<unary_expression>", "<type_specifier>",
     "<multiplicative_expression>", "<additive_expression>", "<relational_expression>", "<equality_expression>",
@@ -19,412 +20,425 @@
     "<parameter_list_question>", "<argument_list_question>"
   ],
   "START": "<program>",
+
   "RULES": [
     {
-      "rule": "<program>",
-      "production": ["<type_specifier>", "identifier", "(", "<parameter_list_question>", ")", "<compound_statement>"]
+      "left": "<program>",
+      "right": ["<type_specifier>", "identifier", "(", "<parameter_list_question>", ")", "<compound_statement>"]
     },
+
     {
-      "rule": "<parameter>",
-      "production": ["<type_specifier>", "<declarator>"]
+      "left": "<parameter>",
+      "right": ["<type_specifier>", "<declarator>"]
     },
     {
-      "rule": "<parameter_list_temp>",
-      "production": [",", "<parameter>", "<parameter_list_temp>"]
+      "left": "<parameter_list_temp>",
+      "right": [",", "<parameter>", "<parameter_list_temp>"]
     },
     {
-      "rule": "<parameter_list_temp>",
-      "production": ["EPSILON"]
+      "left": "<parameter_list_temp>",
+      "right": ["EPSILON"]
     },
     {
-      "rule": "<parameter_list>",
-      "production": ["<parameter>", "<parameter_list_temp>"]
+      "left": "<parameter_list>",
+      "right": ["<parameter>", "<parameter_list_temp>"]
     },
     {
-      "rule": "<parameter_list>",
-      "production": ["<parameter_list_temp>"]
+      "left": "<parameter_list>",
+      "right": ["<parameter_list_temp>"]
     },
     {
-      "rule": "<parameter_list_question>",
-      "production": ["<parameter_list>"]
+      "left": "<parameter_list_question>",
+      "right": ["<parameter_list>"]
     },
     {
-      "rule": "<parameter_list_question>",
-      "production": ["EPSILON"]
+      "left": "<parameter_list_question>",
+      "right": ["EPSILON"]
     },
+
     {
-      "rule": "<argument>",
-      "production": ["<expression>"]
+      "left": "<argument>",
+      "right": ["<expression>"]
     },
     {
-      "rule": "<argument_list_temp>",
-      "production": [",", "<argument>", "<argument_list_temp>"]
+      "left": "<argument_list_temp>",
+      "right": [",", "<argument>", "<argument_list_temp>"]
     },
     {
-      "rule": "<argument_list_temp>",
-      "production": ["EPSILON"]
+      "left": "<argument_list_temp>",
+      "right": ["EPSILON"]
     },
     {
-      "rule": "<argument_list>",
-      "production": ["<argument>", "<argument_list_temp>"]
+      "left": "<argument_list>",
+      "right": ["<argument>", "<argument_list_temp>"]
     },
     {
-      "rule": "<argument_list>",
-      "production": ["<argument_list_temp>"]
+      "left": "<argument_list>",
+      "right": ["<argument_list_temp>"]
     },
     {
-      "rule": "<argument_list_question>",
-      "production": ["<argument_list>"]
+      "left": "<argument_list_question>",
+      "right": ["<argument_list>"]
     },
     {
-      "rule": "<argument_list_question>",
-      "production": ["EPSILON"]
+      "left": "<argument_list_question>",
+      "right": ["EPSILON"]
     },
+
     {
-      "rule": "<declaration>",
-      "production": ["<type_spec
+      "left": "<declaration>",
+      "right": ["<type_specifier>", "<init_declarator_list>", ";"]
     },
     {
-      "rule": "<declaration>",
-      "production": ["<type_specifier>", "<init_declarator_list>", ";"]
+      "left": "<init_declarator_list_temp>",
+      "right": [",", "<init_declarator>", "<init_declarator_list_temp>"]
     },
     {
-      "rule": "<init_declarator_list_temp>",
-      "production": [",", "<init_declarator>", "<init_declarator_list_temp>"]
+      "left": "<init_declarator_list_temp>",
+      "right": ["EPSILON"]
     },
     {
-      "rule": "<init_declarator_list_temp>",
-      "production": ["EPSILON"]
+      "left": "<init_declarator_list>",
+      "right": ["<init_declarator>", "<init_declarator_list_temp>"]
     },
     {
-      "rule": "<init_declarator_list>",
-      "production": ["<init_declarator>", "<init_declarator_list_temp>"]
+      "left": "<init_declarator_list>",
+      "right": ["<init_declarator_list_temp>"]
     },
     {
-      "rule": "<init_declarator_list>",
-      "production": ["<init_declarator_list_temp>"]
+      "left": "<init_declarator>",
+      "right": ["<declarator>", "<init_declarator_temp>"]
     },
     {
-      "rule": "<init_declarator>",
-      "production": ["<declarator>", "<init_declarator_temp>"]
+      "left": "<init_declarator_temp>",
+      "right": ["EPSILON"]
     },
     {
-      "rule": "<init_declarator_temp>",
-      "production": ["EPSILON"]
+      "left": "<init_declarator_temp>",
+      "right": ["=", "<initializer>"]
     },
     {
-      "rule": "<init_declarator_temp>",
-      "production": ["=", "<initializer>"]
+      "left": "<type_specifier>",
+      "right": ["void"]
     },
     {
-      "rule": "<type_specifier>",
-      "production": ["void"]
+      "left": "<type_specifier>",
+      "right": ["int"]
     },
     {
-      "rule": "<type_specifier>",
-      "production": ["int"]
+      "left": "<type_specifier>",
+      "right": ["float"]
     },
     {
-      "rule": "<type_specifier>",
-      "production": ["float"]
+      "left": "<type_specifier>",
+      "right": ["boolean"]
     },
     {
-      "rule": "<type_specifier>",
-      "production": ["boolean"]
+      "left": "<declarator_tail>",
+      "right": ["[", "<declarator_int>", "]"]
     },
     {
-      "rule": "<declarator_tail>",
-      "production": ["[", "<declarator_int>", "]"]
+      "left": "<declarator_tail>",
+      "right": ["EPSILON"]
     },
     {
-      "rule": "<declarator_tail>",
-      "production": ["EPSILON"]
+      "left": "<declarator_int>",
+      "right": ["integer_constant"]
     },
     {
-      "rule": "<declarator_int>",
-      "production": ["integer_constant"]
+      "left": "<declarator_int>",
+      "right": ["EPSILON"]
     },
     {
-      "rule": "<declarator_int>",
-      "production": ["EPSILON"]
+      "left": "<declarator>",
+      "right": ["<direct_declarator>", "<declarator_tail>"]
     },
     {
-      "rule": "<declarator>",
-      "production": ["<direct_declarator>", "<declarator_tail>"]
+      "left": "<direct_declarator>",
+      "right": ["identifier"]
     },
     {
-      "rule": "<direct_declarator>",
-      "production": ["identifier"]
+      "left": "<direct_declarator>",
+      "right": ["(", "<declarator>", ")"]
     },
+
     {
-      "rule": "<direct_declarator>",
-      "production": ["(", "<declarator>", ")"]
+      "left": "<initializer>",
+      "right": ["<expression>"]
     },
+
     {
-      "rule": "<initializer>",
-      "production": ["<expression>"]
+      "left": "<primary_expression_tail>",
+      "right": ["[", "<expression>", "]"]
     },
     {
-      "rule": "<primary_expression_tail>",
-      "production": ["[", "<expression>", "]"]
+      "left": "<primary_expression_tail>",
+      "right": ["(", "<argument_list_question>", ")"]
     },
     {
-      "rule": "<primary_expression_tail>",
-      "production": ["(", "<argument_list_question>", ")"]
+      "left": "<primary_expression_tail>",
+      "right": ["EPSILON"]
     },
     {
-      "rule": "<primary_expression_tail>",
-      "production": ["EPSILON"]
+      "left": "<primary_expression>",
+      "right": ["identifier", "<primary_expression_tail>"]
     },
     {
-      "rule": "<primary_expression>",
-      "production": ["identifier", "<primary_expression_tail>"]
+      "left": "<primary_expression>",
+      "right": ["<constant>"]
     },
     {
-      "rule": "<primary_expression>",
-      "production": ["<constant>"]
+      "left": "<primary_expression>",
+      "right": ["(", "<expression>", ")"]
     },
+
     {
-      "rule": "<primary_expression>",
-      "production": ["(", "<expression>", ")"]
+      "left": "<constant>",
+      "right": ["integer_constant"]
     },
     {
-      "rule": "<constant>",
-      "production": ["integer_constant"]
+      "left": "<constant>",
+      "right": ["float_constant"]
     },
     {
-      "rule": "<constant>",
-      "production": ["float_constant"]
+      "left": "<constant>",
+      "right": ["boolean_constant"]
     },
     {
-      "rule": "<constant>",
-      "production": ["boolean_constant"]
+      "left": "<constant>",
+      "right": ["string_constant"]
     },
+
     {
-      "rule": "<constant>",
-      "production": ["string_constant"]
+      "left": "<unary_operator>",
+      "right": ["+"]
     },
     {
-      "rule": "<unary_operator>",
-      "production": ["+"]
+      "left": "<unary_operator>",
+      "right": ["-"]
     },
     {
-      "rule": "<un
+      "left": "<unary_operator>",
+      "right": ["!"]
     },
     {
-      "rule": "<unary_operator>",
-      "production": ["-"]
+      "left": "<unary_expression>",
+      "right": ["<primary_expression>"]
     },
     {
-      "rule": "<unary_operator>",
-      "production": ["!"]
+      "left": "<unary_expression>",
+      "right": ["<unary_operator>", "<primary_expression>"]
     },
+
     {
-      "rule": "<unary_expression>",
-      "production": ["<primary_expression>"]
+      "left": "<multiplicative_expression_temp>",
+      "right": ["*", "<unary_expression>", "<multiplicative_expression_temp>"]
     },
     {
-      "rule": "<unary_expression>",
-      "production": ["<unary_operator>", "<primary_expression>"]
+      "left": "<multiplicative_expression_temp>",
+      "right": ["/", "<unary_expression>", "<multiplicative_expression_temp>"]
     },
     {
-      "rule": "<multiplicative_expression_temp>",
-      "production": ["*", "<unary_expression>", "<multiplicative_expression_temp>"]
+      "left": "<multiplicative_expression_temp>",
+      "right": ["EPSILON"]
     },
     {
-      "rule": "<multiplicative_expression_temp>",
-      "production": ["/", "<unary_expression>", "<multiplicative_expression_temp>"]
+      "left": "<multiplicative_expression>",
+      "right": ["<unary_expression>", "<multiplicative_expression_temp>"]
     },
+
     {
-      "rule": "<multiplicative_expression_temp>",
-      "production": ["EPSILON"]
+      "left": "<additive_expression_temp>",
+      "right": ["+", "<multiplicative_expression>", "<additive_expression_temp>"]
     },
     {
-      "rule": "<multiplicative_expression>",
-      "production": ["<unary_expression>", "<multiplicative_expression_temp>"]
+      "left": "<additive_expression_temp>",
+      "right": ["-", "<multiplicative_expression>", "<additive_expression_temp>"]
     },
     {
-      "rule": "<additive_expression_temp>",
-      "production": ["+", "<multiplicative_expression>", "<additive_expression_temp>"]
+      "left": "<additive_expression_temp>",
+      "right": ["EPSILON"]
     },
     {
-      "rule": "<additive_expression_temp>",
-      "production": ["-", "<multiplicative_expression>", "<additive_expression_temp>"]
+      "left": "<additive_expression>",
+      "right": ["<multiplicative_expression>", "<additive_expression_temp>"]
     },
+
     {
-      "rule": "<additive_expression_temp>",
-      "production": ["EPSILON"]
+      "left": "<relational_expression_temp>",
+      "right": ["<", "<additive_expression>", "<relational_expression_temp>"]
     },
     {
-      "rule": "<additive_expression>",
-      "production": ["<multiplicative_expression>", "<additive_expression_temp>"]
+      "left": "<relational_expression_temp>",
+      "right": [">", "<additive_expression>", "<relational_expression_temp>"]
     },
     {
-      "rule": "<relational_expression_temp>",
-      "production": ["<", "<additive_expression>", "<relational_expression_temp>"]
+      "left": "<relational_expression_temp>",
+      "right": ["<=", "<additive_expression>", "<relational_expression_temp>"]
     },
     {
-      "rule": "<relational_expression_temp>",
-      "production": [">", "<additive_expression>", "<relational_expression_temp>"]
+      "left": "<relational_expression_temp>",
+      "right": [">=", "<additive_expression>", "<relational_expression_temp>"]
     },
     {
-      "rule": "<relational_expression_temp>",
-      "production": ["<=", "<additive_expression>", "<relational_expression_temp>"]
+      "left": "<relational_expression_temp>",
+      "right": ["EPSILON"]
     },
     {
-      "rule": "<relational_expression_temp>",
-      "production": [">=", "<additive_expression>", "<relational_expression_temp>"]
+      "left": "<relational_expression>",
+      "right": ["<additive_expression>", "<relational_expression_temp>"]
     },
+
     {
-      "rule": "<relational_expression_temp>",
-      "production": ["EPSILON"]
+      "left": "<equality_expression_temp>",
+      "right": ["==", "<relational_expression>", "<equality_expression_temp>"]
     },
     {
-      "rule": "<relational_expression>",
-      "production": ["<additive_expression>", "<relational_expression_temp>"]
+      "left": "<equality_expression_temp>",
+      "right": ["!=", "<relational_expression>", "<equality_expression_temp>"]
     },
     {
-      "rule": "<equality_expression_temp>",
-      "production": ["==", "<relational_expression>", "<equality_expression_temp>"]
+      "left": "<equality_expression_temp>",
+      "right": ["EPSILON"]
     },
     {
-      "rule": "<equality_expression_temp>",
-      "production": ["!=", "<relational_expression>", "<equality_expression_temp>"]
+      "left": "<equality_expression>",
+      "right": ["<relational_expression>", "<equality_expression_temp>"]
     },
+
     {
-      "rule": "<equality_expression_temp>",
-      "production": ["EPSILON"]
+      "left": "<assignment_expression_temp>",
+      "right": ["=", "<equality_expression>", "<assignment_expression_temp>"]
     },
     {
-      "rule": "<equality_expression>",
-      "production": ["<relational_expression>", "<equality_expression_temp>"]
+      "left": "<assignment_expression_temp>",
+      "right": ["EPSILON"]
     },
     {
-      "rule": "<assignment_expression_temp>",
-      "production": ["=", "<equality_expression>", "<assignment_expression_temp>"]
+      "left": "<assignment_expression>",
+      "right": ["<equality_expression>", "<assignment_expression_temp>"]
     },
+
     {
-      "rule": "<assignment_expression_temp>",
-      "production": ["EPSILON"]
+      "left": "<expression>",
+      "right": ["<assignment_expression>"]
     },
     {
-      "rule": "<assignment_expression>",
-      "production": ["<equality_expression>", "<assignment_expression_temp>"]
+      "left": "<expression_question>",
+      "right": ["<expression>"]
     },
     {
-      "rule": "<expression>",
-      "production": ["<assignment_expression>"]
+      "left": "<expression_question>",
+      "right": ["EPSILON"]
     },
+
     {
-      "rule": "<expression_question>",
-      "production": ["<expression>"]
+      "left": "<statement>",
+      "right": ["<compound_statement>"]
     },
     {
-      "rule": "<expression_question
+      "left": "<statement>",
+      "right": ["<expression_statement>"]
     },
     {
-      "rule": "<expression_question>",
-      "production": ["EPSILON"]
+      "left": "<statement>",
+      "right": ["<selection_statement>"]
     },
     {
-      "rule": "<statement>",
-      "production": ["<compound_statement>"]
+      "left": "<statement>",
+      "right": ["<for_statement>"]
     },
     {
-      "rule": "<statement>",
-      "production": ["<expression_statement>"]
+      "left": "<statement>",
+      "right": ["<while_statement>"]
     },
     {
-      "rule": "<statement>",
-      "production": ["<selection_statement>"]
+      "left": "<statement>",
+      "right": ["<break_statement>"]
     },
     {
-      "rule": "<statement>",
-      "production": ["<for_statement>"]
+      "left": "<statement>",
+      "right": ["<continue_statement>"]
     },
     {
-      "rule": "<statement>",
-      "production": ["<while_statement>"]
+      "left": "<statement>",
+      "right": ["<return_statement>"]
     },
+
     {
-      "rule": "<statement>",
-      "production": ["<break_statement>"]
+      "left": "<compound_statement>",
+      "right": ["{", "<block_item_list>", "}"]
     },
     {
-      "rule": "<statement>",
-      "production": ["<continue_statement>"]
+      "left": "<block_item>",
+      "right": ["<declaration>"]
     },
     {
-      "rule": "<statement>",
-      "production": ["<return_statement>"]
+      "left": "<block_item>",
+      "right": ["<statement>"]
     },
     {
-      "rule": "<compound_statement>",
-      "production": ["{", "<block_item_list>", "}"]
+      "left": "<block_item_list>",
+      "right": ["<block_item>", "<block_item_list_temp>"]
     },
     {
-      "rule": "<block_item>",
-      "production": ["<declaration>"]
+      "left": "<block_item_list>",
+      "right": ["EPSILON"]
     },
     {
-      "rule": "<block_item>",
-      "production": ["<statement>"]
+      "left": "<block_item_list_temp>",
+      "right": ["EPSILON"]
     },
     {
-      "rule": "<block_item_list>",
-      "production": ["<block_item>", "<block_item_list_temp>"]
+      "left": "<block_item_list_temp>",
+      "right": ["<block_item_list>"]
     },
+
     {
-      "rule": "<block_item_list>",
-      "production": ["EPSILON"]
+      "left": "<expression_statement>",
+      "right": ["<expression>", ";"]
     },
     {
-      "rule": "<block_item_list_temp>",
-      "production": ["EPSILON"]
+      "left": "<expression_statement>",
+      "right": [";"]
     },
+
     {
-      "rule": "<block_item_list_temp>",
-      "production": ["<block_item_list>"]
+      "left": "<return_statement>",
+      "right": ["return", "<expression_question>", ";"]
     },
+
     {
-      "rule": "<expression_statement>",
-      "production": ["<expression>", ";"]
+      "left": "<continue_statement>",
+      "right": ["continue", ";"]
     },
+
     {
-      "rule": "<expression_statement>",
-      "production": [";"]
+      "left": "<break_statement>",
+      "right": ["break", ";"]
     },
+
     {
-      "rule": "<return_statement>",
-      "production": ["return", "<expression_question>", ";"]
+      "left": "<selection_statement>",
+      "right": ["if", "(", "<expression>", ")", "<compound_statement>", "<selection_statement_temp>"]
     },
     {
-      "rule": "<continue_statement>",
-      "production": ["continue", ";"]
+      "left": "<selection_statement_temp>",
+      "right": ["EPSILON"]
     },
     {
-      "rule": "<break_statement>",
-      "production": ["break", ";"]
+      "left": "<selection_statement_temp>",
+      "right": ["else", "<statement>"]
     },
+
     {
-      "rule": "<selection_statement>",
-      "production": ["if", "(", "<expression>", ")", "<compound_statement>", "<selection_statement_temp>"]
+      "left": "<for_statement>",
+      "right": ["for", "(", "<expression_question>", ";", "<expression_question>", ";", "<expression_question>", ")", "<statement>"]
     },
+
     {
-      "rule": "<selection_statement_temp>",
-      "production": ["EPSILON"]
-    },
-    {
-      "rule": "<selection_statement_temp>",
-      "production": ["else", "<statement>"]
-    },
-    {
-      "rule": "<for_statement>",
-      "production": ["for", "(", "<expression_question>", ";", "<expression_question>", ";", "<expression_question>", ")", "<statement>"]
-    },
-    {
-      "rule": "<while_statement>",
-      "production": ["while", "(", "<expression>", ")", "<statement>"]
+      "left": "<while_statement>",
+      "right": ["while", "(", "<expression>", ")", "<statement>"]
     }
   ]
 }

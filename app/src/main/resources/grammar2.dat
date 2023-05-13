@@ -4,6 +4,7 @@
     "identifier", "integer_constant", "float_constant", "boolean_constant", "string_constant",
     "for", "while", "break", "continue", "return", "else", "float", "if", "int", "void", "boolean"
   ],
+
   "NON_TERMINAL": [
     "<primary_expression>", "<constant>", "<unary_operator>", "<unary_expression>", "<type_specifier>",
     "<multiplicative_expression>", "<additive_expression>", "<relational_expression>", "<equality_expression>",
@@ -19,6 +20,7 @@
     "<parameter_list_question>", "<argument_list_question>"
   ],
   "START": "<program>",
+
   "RULES": [
     {
       "left": "<program>",
@@ -210,9 +212,6 @@
     {
       "left": "<unary_operator>",
       "right": ["+"]
-    },
-    {
-      "left": "<un
     },
     {
       "left": "<unary_operator>",

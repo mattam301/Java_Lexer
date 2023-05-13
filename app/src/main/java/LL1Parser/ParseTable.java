@@ -13,21 +13,52 @@ public class ParseTable {
     private Map<String, List<List<String>>> grammar;
     private static Map<String, Map<String, List<String>>> parseTable;
 
+    private List<String> terminals;
+    private List<String> nonTerminals;
+    private String start;
+
     public ParseTable(String datFile) {
+        grammar = new LinkedHashMap<>();
+        terminals = new ArrayList<>();
+        nonTerminals = new ArrayList<>();
+
         JSONParser parser = new JSONParser();
         try {
-            Object obj = parser.parse(new FileReader("/Users/User/Desktop/course.json"));
+            Object obj = parser.parse(new FileReader(datFile));
             JSONObject jsonObject = (JSONObject)obj;
-            String name = (String)jsonObject.get("Name");
-            String course = (String)jsonObject.get("Course");
-            JSONArray subjects = (JSONArray)jsonObject.get("Subjects");
-            System.out.println("Name: " + name);
-            System.out.println("Course: " + course);
-            System.out.println("Subjects:");
-            Iterator iterator = subjects.iterator();
+
+            // get terminal characters and states
+            JSONArray terminalList = (JSONArray)jsonObject.get("TERMINAL");
+            Iterator iterator = terminalList.iterator();
             while (iterator.hasNext()) {
-                System.out.println(iterator.next());
+                terminals.add((String) iterator.next());
             }
+
+            // get non-terminal characters and states
+            JSONArray nonTerminalList = (JSONArray)jsonObject.get("NON_TERMINAL");
+            iterator = nonTerminalList.iterator();
+            while (iterator.hasNext()) {
+                nonTerminals.add((String) iterator.next());
+            }
+
+            // get starting state
+            start = (String)jsonObject.get("START");
+
+            // get rules
+            JSONArray grammarList = (JSONArray)jsonObject.get("RULES");
+            iterator = grammarList.iterator();
+            while (iterator.hasNext()) {
+                JSONObject rule = (JSONObject) iterator.next();
+                String left = (String) rule.get("left");
+                JSONArray right = (JSONArray) rule.get("right");
+
+                if (!grammar.containsKey(left)) {
+                    grammar.put(left, Arrays.asList(right));
+                } else {
+
+                }
+            }
+
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -199,43 +230,42 @@ public class ParseTable {
 
 
     public static void main(String[] args) {
-//        ParseTable parseTable = new ParseTable("app/src/main/resources/grammar.dat");
-
+        ParseTable parseTable = new ParseTable("app/src/main/resources/grammar2.dat");
 
         // Sample production rules
-        Map<String, List<List<String>>> grammar = new LinkedHashMap<>();
-        grammar.put("A", List.of(Arrays.asList("id", "A'")));
-        grammar.put("A'", Arrays.asList(Arrays.asList("=", "E"),
-                Arrays.asList("+=", "E"),
-                Arrays.asList("-=", "E"),
-                Arrays.asList("*=", "E"),
-                Arrays.asList("/=", "E")));
-
-        grammar.put("E", List.of(Arrays.asList("T", "E'")));
-        grammar.put("E'", Arrays.asList(Arrays.asList("+", "T", "E'"),
-                Arrays.asList("-", "T", "E'"),
-                Collections.singletonList("epsilon")));
-
-        grammar.put("T", List.of(Arrays.asList("F", "T'")));
-        grammar.put("T'", Arrays.asList(Arrays.asList("*", "F", "T'"),
-                Arrays.asList("/", "F", "T'"),
-                Collections.singletonList("epsilon")));
-
-        grammar.put("F", Arrays.asList(Arrays.asList("(", "E", ")"),
-                Collections.singletonList("id"),
-                Collections.singletonList("num")));
+//        Map<String, List<List<String>>> grammar = new LinkedHashMap<>();
+//        grammar.put("A", List.of(Arrays.asList("id", "A'")));
+//        grammar.put("A'", Arrays.asList(Arrays.asList("=", "E"),
+//                Arrays.asList("+=", "E"),
+//                Arrays.asList("-=", "E"),
+//                Arrays.asList("*=", "E"),
+//                Arrays.asList("/=", "E")));
+//
+//        grammar.put("E", List.of(Arrays.asList("T", "E'")));
+//        grammar.put("E'", Arrays.asList(Arrays.asList("+", "T", "E'"),
+//                Arrays.asList("-", "T", "E'"),
+//                Collections.singletonList("epsilon")));
+//
+//        grammar.put("T", List.of(Arrays.asList("F", "T'")));
+//        grammar.put("T'", Arrays.asList(Arrays.asList("*", "F", "T'"),
+//                Arrays.asList("/", "F", "T'"),
+//                Collections.singletonList("epsilon")));
+//
+//        grammar.put("F", Arrays.asList(Arrays.asList("(", "E", ")"),
+//                Collections.singletonList("id"),
+//                Collections.singletonList("num")));
 
         // Sample first and follow sets
-        String startSymbol = "A";
-
-        // Calculate FIRST sets
-        Map<String, Set<String>> firstSets = calculateFirstSets(grammar);
-
-        // Calculate FOLLOW sets
-        Map<String, Set<String>> followSets = calculateFollowSets(grammar, startSymbol);
-
-        ParseTable c = new ParseTable(firstSets, followSets, grammar);
-        c.generateParseTable();
+//        String startSymbol = "A";
+//
+//        // Calculate FIRST sets
+//        Map<String, Set<String>> firstSets = calculateFirstSets(grammar);
+//
+//        // Calculate FOLLOW sets
+//        Map<String, Set<String>> followSets = calculateFollowSets(grammar, startSymbol);
+//
+//        ParseTable c = new ParseTable(firstSets, followSets, grammar);
+//        c.generateParseTable();
 
 //        System.out.println(parse2("a = 1", parseTable, startSymbol));
 
