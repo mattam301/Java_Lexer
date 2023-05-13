@@ -7,20 +7,22 @@ import java.util.*;
 import LL1Parser.model.Grammar;
 import LL1Parser.model.Rules;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.json.simple.*;
-import org.json.simple.parser.*;
+
+import static LL1Parser.utils.FirstFollowSetsUtil.calculateFirstSets;
+import static LL1Parser.utils.FirstFollowSetsUtil.calculateFollowSets;
+
 
 public class ParseTable {
 
-    private Map<String, Set<String>> firstSets;
-    private Map<String, Set<String>> followSets;
-    private Map<String, List<List<String>>> grammar;
+    private static Map<String, Set<String>> firstSets;
+    private static Map<String, Set<String>> followSets;
+    private static Map<String, List<List<String>>> grammar;
     private static Map<String, Map<String, List<String>>> parseTable;
-    private Grammar g;
-    private Rules[] rules;
-    private List<String> terminals;
-    private List<String> nonTerminals;
-    private String start;
+    private static Grammar rawGrammar;
+    private static Rules[] rules;
+    private static List<String> terminals;
+    private static List<String> nonTerminals;
+    private static String start;
 
     public ParseTable(String datFile) {
         grammar = new LinkedHashMap<>();
@@ -29,73 +31,24 @@ public class ParseTable {
 
         ObjectMapper mapper = new ObjectMapper();
         try {
-            g = mapper.readValue(new FileReader(datFile), Grammar.class);
+            rawGrammar = mapper.readValue(new FileReader(datFile), Grammar.class);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        terminals = new ArrayList<>(g.getTerminal());
-        nonTerminals = new ArrayList<>(g.getNonTerminal());
-        start = g.getStart();
-        rules = g.getRules();
+        terminals = new ArrayList<>(rawGrammar.getTerminal());
+        nonTerminals = new ArrayList<>(rawGrammar.getNonTerminal());
+        start = rawGrammar.getStart();
+        rules = rawGrammar.getRules();
         for (Rules rule : rules) {
             if (!grammar.containsKey(rule.getLeft())) {
                 grammar.put(rule.getLeft(), Collections.singletonList(rule.getRight()));
             } else {
                 List<List<String>> newGram = new ArrayList<>();
-                newGram = grammar.get(rule.getLeft());
+                newGram.addAll(grammar.get(rule.getLeft()));
                 newGram.add(rule.getRight());
                 grammar.replace(rule.getLeft(), newGram);
             }
         }
-
-//        JSONParser parser = new JSONParser();
-//        try {
-//            Object obj = parser.parse(new FileReader(datFile));
-//            JSONObject jsonObject = (JSONObject)obj;
-//
-//            // get terminal characters and states
-//            JSONArray terminalList = (JSONArray)jsonObject.get("TERMINAL");
-//            Iterator iterator = terminalList.iterator();
-//            while (iterator.hasNext()) {
-//                terminals.add((String) iterator.next());
-//            }
-//
-//            // get non-terminal characters and states
-//            JSONArray nonTerminalList = (JSONArray)jsonObject.get("NON_TERMINAL");
-//            iterator = nonTerminalList.iterator();
-//            while (iterator.hasNext()) {
-//                nonTerminals.add((String) iterator.next());
-//            }
-//
-//            // get starting state
-//            start = (String)jsonObject.get("START");
-//
-//            // get rules
-//            JSONArray grammarList = (JSONArray)jsonObject.get("RULES");
-//            iterator = grammarList.iterator();
-//            while (iterator.hasNext()) {
-//                JSONObject rule = (JSONObject) iterator.next();
-//                String left = (String) rule.get("left");
-//                JSONArray right = (JSONArray) rule.get("right");
-//
-//                if (!grammar.containsKey(left)) {
-//                    grammar.put(left, Arrays.asList(right));
-//                } else {
-//
-//                }
-//            }
-//
-//        } catch(Exception e) {
-//            e.printStackTrace();
-//        }
-    }
-
-    public ParseTable(Map<String, Set<String>> firstSets, Map<String, Set<String>> followSets,
-                      Map<String, List<List<String>>> grammar) {
-        this.firstSets = firstSets;
-        this.followSets = followSets;
-        this.grammar = grammar;
-        parseTable = new HashMap<>();
     }
 
     public void generateParseTable() {
@@ -153,68 +106,6 @@ public class ParseTable {
         return tokenizedInput.toString().trim();
     }
 
-//    public static Node parse(String input, Map<String, Map<String, List<String>>> parseTable, String startSymbol) {
-//        Stack<Node> stack = new Stack<>();
-//        stack.push(new Node("$"));
-//        Node startNode = new Node(startSymbol);
-//        stack.push(startNode);
-//
-//        int i = 0;
-//        while (!stack.isEmpty()) {
-//            Node top = stack.peek();
-//            if (top.symbol.equals("$") && i == input.length()) {
-//                return startNode;
-//            } else if (top.symbol.equals(input.charAt(i) + "")) {
-//                stack.pop();
-//                i++;
-//            } else if (parseTable.containsKey(top.symbol) && parseTable.get(top.symbol).containsKey(input.charAt(i) + "")) {
-//                stack.pop();
-//                List<String> production = parseTable.get(top.symbol).get(input.charAt(i) + "");
-//                for (int j = production.size() - 1; j >= 0; j--) {
-//                    if (!production.get(j).equals("epsilon")) {
-//                        Node child = new Node(production.get(j));
-//                        top.children.add(child);
-//                        stack.push(child);
-//                    }
-//                }
-//            } else {
-//                return null;
-//            }
-//        }
-//
-//        return null;
-//    }
-//
-//    static class Node {
-//        String symbol;
-//        List<Node> children;
-//
-//        public Node(String symbol) {
-//            this.symbol = symbol;
-//            this.children = new ArrayList<>();
-//        }
-//    }
-//    public static String toDot(Node root) {
-//        StringBuilder dot = new StringBuilder();
-//        dot.append("digraph AST {\n");
-//        dot.append("node [shape=none fontname=\"Courier\" fontsize=14]\n");
-//        dot.append("edge [fontname=\"Courier\" fontsize=14]\n");
-//        toDot(root, dot, 0);
-//        dot.append("}\n");
-//        return dot.toString();
-//    }
-//
-//    private static int toDot(Node node, StringBuilder dot, int id) {
-//        int myId = id;
-//        dot.append(String.format("node%d [label=\"%s\"]\n", myId, node.symbol));
-//        for (Node child : node.children) {
-//            int childId = toDot(child, dot, id + 1);
-//            dot.append(String.format("node%d -> node%d\n", myId, id + 1));
-//            id = childId;
-//        }
-//        return id;
-//    }
-
     public static boolean parse2(String input, Map<String, Map<String, List<String>>> parseTable, String startSymbol) {
         input += '$';
         Stack<String> stack = new Stack<>();
@@ -253,53 +144,59 @@ public class ParseTable {
         return true;
     }
 
+    public Node parse(String input, Map<String, Map<String, List<String>>> parseTable, String startSymbol) {
+        Stack<Node> stack = new Stack<>();
+        stack.push(new Node("$"));
+        Node startNode = new Node(startSymbol);
+        stack.push(startNode);
+
+        int i = 0;
+        while (!stack.isEmpty()) {
+            Node top = stack.peek();
+            if (top.symbol.equals("$") && i == input.length()) {
+                return startNode;
+            } else if (top.symbol.equals(input.charAt(i) + "")) {
+                stack.pop();
+                i++;
+            } else if (parseTable.containsKey(top.symbol) && parseTable.get(top.symbol).containsKey(input.charAt(i) + "")) {
+                stack.pop();
+                List<String> production = parseTable.get(top.symbol).get(input.charAt(i) + "");
+                for (int j = production.size() - 1; j >= 0; j--) {
+                    if (!production.get(j).equals("epsilon")) {
+                        Node child = new Node(production.get(j));
+                        top.children.add(child);
+                        stack.push(child);
+                    }
+                }
+            } else {
+                return null;
+            }
+        }
+
+        return null;
+    }
+
 
 
     public static void main(String[] args) {
-        ParseTable parseTable = new ParseTable("app/src/main/resources/grammar2.dat");
+        ParseTable parseTbl = new ParseTable("app/src/main/resources/grammar2.dat");
+        firstSets = calculateFirstSets(grammar);
+        followSets = calculateFollowSets(grammar, start);
+        parseTbl.generateParseTable();
+        parseTbl.printParseTable();
 
-        // Sample production rules
-//        Map<String, List<List<String>>> grammar = new LinkedHashMap<>();
-//        grammar.put("A", List.of(Arrays.asList("id", "A'")));
-//        grammar.put("A'", Arrays.asList(Arrays.asList("=", "E"),
-//                Arrays.asList("+=", "E"),
-//                Arrays.asList("-=", "E"),
-//                Arrays.asList("*=", "E"),
-//                Arrays.asList("/=", "E")));
-//
-//        grammar.put("E", List.of(Arrays.asList("T", "E'")));
-//        grammar.put("E'", Arrays.asList(Arrays.asList("+", "T", "E'"),
-//                Arrays.asList("-", "T", "E'"),
-//                Collections.singletonList("epsilon")));
-//
-//        grammar.put("T", List.of(Arrays.asList("F", "T'")));
-//        grammar.put("T'", Arrays.asList(Arrays.asList("*", "F", "T'"),
-//                Arrays.asList("/", "F", "T'"),
-//                Collections.singletonList("epsilon")));
-//
-//        grammar.put("F", Arrays.asList(Arrays.asList("(", "E", ")"),
-//                Collections.singletonList("id"),
-//                Collections.singletonList("num")));
 
-        // Sample first and follow sets
-//        String startSymbol = "A";
-//
-//        // Calculate FIRST sets
-//        Map<String, Set<String>> firstSets = calculateFirstSets(grammar);
-//
-//        // Calculate FOLLOW sets
-//        Map<String, Set<String>> followSets = calculateFollowSets(grammar, startSymbol);
-//
-//        ParseTable c = new ParseTable(firstSets, followSets, grammar);
-//        c.generateParseTable();
 
-//        System.out.println(parse2("a = 1", parseTable, startSymbol));
+    }
 
-//        String input = "1+1";
-//        String tokenizedInput = tokenize(input);
-//        Node ast = parse(tokenizedInput, parseTable, "E");
-//        String dot = toDot(ast);
-//        System.out.println(dot);
+    class Node {
+        String symbol;
+        List<Node> children;
+
+        public Node(String symbol) {
+            this.symbol = symbol;
+            this.children = new ArrayList<>();
+        }
     }
 }
 

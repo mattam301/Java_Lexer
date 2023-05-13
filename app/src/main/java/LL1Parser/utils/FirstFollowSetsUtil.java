@@ -1,11 +1,12 @@
-package LL1Parser;
+package LL1Parser.utils;
 
 import java.util.*;
 
-public class FirstFollowSets {
-    private static final String EPSILON = "epsilon";
-    private static Map<String, Set<String>> firstSets;
+public class FirstFollowSetsUtil {
 
+    private static final String EPSILON = "epsilon";
+
+    private static Map<String, Set<String>> firstSets;
     private static Map<String, Set<String>> followSets;
 
     private static boolean isTerminal(String symbol) {
@@ -156,41 +157,5 @@ public class FirstFollowSets {
         }
 
         followSets.put(nonTerminal, followSet);
-    }
-
-    public static void main(String[] args) {
-        // Example grammar
-        Map<String, List<List<String>>> grammar = new LinkedHashMap<>();
-        grammar.put("E", List.of(Arrays.asList("T", "E'")));
-        grammar.put("E'", Arrays.asList(Arrays.asList("+", "T", "E'"),
-                Arrays.asList("-", "T", "E'"),
-                Collections.singletonList(EPSILON)));
-        grammar.put("T", List.of(Arrays.asList("F", "T'")));
-        grammar.put("T'", Arrays.asList(Arrays.asList("*", "F", "T'"),
-                Arrays.asList("/", "F", "T'"),
-                Collections.singletonList(EPSILON)));
-        grammar.put("F", Arrays.asList(Arrays.asList("(", "E", ")"),
-                Collections.singletonList("id"),
-                Collections.singletonList("num")));
-
-        String startSymbol = "E";
-
-        // Calculate FIRST sets
-        Map<String, Set<String>> firstSets = calculateFirstSets(grammar);
-
-        // Calculate FOLLOW sets
-        Map<String, Set<String>> followSets = calculateFollowSets(grammar, startSymbol);
-
-        // Print the FIRST sets
-        System.out.println("FIRST Sets:");
-        for (Map.Entry<String, Set<String>> entry : firstSets.entrySet()) {
-            System.out.println(entry.getKey() + ": " + entry.getValue());
-        }
-
-        // Print the FOLLOW sets
-        System.out.println("\nFOLLOW Sets:");
-        for (Map.Entry<String, Set<String>> entry : followSets.entrySet()) {
-            System.out.println(entry.getKey() + ": " + entry.getValue());
-        }
     }
 }

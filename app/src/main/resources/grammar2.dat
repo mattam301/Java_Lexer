@@ -1,11 +1,11 @@
 {
-  "TERMINAL": [
+  "terminal": [
     "(", ")", "{", "}", "*", "+", "-", "/", "%", ",", "<", ">", "<=", ">=", "=", "==", "!", "!=", ";", "[", "]",
     "identifier", "integer_constant", "float_constant", "boolean_constant", "string_constant",
     "for", "while", "break", "continue", "return", "else", "float", "if", "int", "void", "boolean"
   ],
 
-  "NON_TERMINAL": [
+  "non_terminal": [
     "<primary_expression>", "<constant>", "<unary_operator>", "<unary_expression>", "<type_specifier>",
     "<multiplicative_expression>", "<additive_expression>", "<relational_expression>", "<equality_expression>",
     "<assignment_expression>", "<expression>", "<declarator_tail>", "<declaration>", "<init_declarator_list>",
@@ -19,9 +19,9 @@
     "<additive_expression_temp>", "<selection_statement_temp>", "<block_item_list_temp>",
     "<parameter_list_question>", "<argument_list_question>"
   ],
-  "START": "<program>",
+  "start": "<program>",
 
-  "RULES": [
+  "rules": [
     {
       "left": "<program>",
       "right": ["<type_specifier>", "identifier", "(", "<parameter_list_question>", ")", "<compound_statement>"]
