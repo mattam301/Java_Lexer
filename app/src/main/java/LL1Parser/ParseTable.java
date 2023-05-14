@@ -1,5 +1,7 @@
 package LL1Parser;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
@@ -106,23 +108,23 @@ public class ParseTable {
         return tokenizedInput.toString().trim();
     }
 
-    public static boolean parse2(String input, Map<String, Map<String, List<String>>> parseTable, String startSymbol) {
-        input += '$';
+    public static boolean parse2(List<String> tokens, Map<String, Map<String, List<String>>> parseTable, String startSymbol) {
+        tokens.add("$");
         Stack<String> stack = new Stack<>();
         stack.push("$");
         stack.push(startSymbol);
 
-        input = tokenize(input);
-        String[] tokens = input.split("\\s+");
+//        input = tokenize(input);
+//        String[] tokens = input.split("\\s+");
 
         int i = 0;
         while (!stack.isEmpty()) {
             String top = stack.peek();
-            if (top.equals("$") && i == input.length()) {
+            if (top.equals("$") && i == tokens.size()) {
                 return true;
             }
 
-            String current = tokens[i];
+            String current = tokens.get(i);
 
             while (!top.equals(current)) {
                 if (!parseTable.get(top).containsKey(current)) {
@@ -140,6 +142,40 @@ public class ParseTable {
             }
             stack.pop();
             i++;
+        }
+        return true;
+    }
+
+
+    public static boolean parse(List<String> input) {
+        Stack<String> stack = new Stack<>();
+        stack.push("$");
+        stack.push(start);
+        input.add("$");
+        int i = 0;
+        while (!stack.isEmpty()) {
+            String top = stack.peek();
+            String currentInput = input.get(i);
+            if (top.equals(currentInput)) {
+                stack.pop();
+                i++;
+            } else if (!parseTable.containsKey(top)) {
+                return false;
+            } else {
+                Map<String, List<String>> row = parseTable.get(top);
+                if (!row.containsKey(currentInput)) {
+                    return false;
+                } else {
+                    List<String> production = row.get(currentInput);
+                    stack.pop();
+                    for (int j = production.size() - 1; j >= 0; j--) {
+                        String symbol = production.get(j);
+                        if (!symbol.equals("epsilon")) {
+                            stack.push(symbol);
+                        }
+                    }
+                }
+            }
         }
         return true;
     }
@@ -188,21 +224,35 @@ public class ParseTable {
         firstSets = FirstFollowSetsGenerator.calculateFirstSets(grammar, terminals);
         followSets = FirstFollowSetsGenerator.calculateFollowSets(grammar, terminals, start);
 
-        for (String s : followSets.keySet()) {
-            System.out.print(s + ": [");
-            String [] str = followSets.get(s).toArray(new String[0]);
-            for (int i = 0; i < str.length - 1; i++) {
-                System.out.print(str[i] + ", ");
-            }
-//            for (String list : followSets.get(s)) {
-//                System.out.print(list + ", ");
-//
+//        for (String s : followSets.keySet()) {
+//            System.out.print(s + ": [");
+//            String [] str = followSets.get(s).toArray(new String[0]);
+//            for (int i = 0; i < str.length - 1; i++) {
+//                System.out.print(str[i] + ", ");
 //            }
-            System.out.println(str[str.length -1] + "]");
-        }
-//        parseTbl.generateParseTable();
-//        parseTbl.printParseTable();
+////            for (String list : followSets.get(s)) {
+////                System.out.print(list + ", ");
+////
+////            }
+//            System.out.println(str[str.length -1] + "]");
+//        }
+        parseTbl.generateParseTable();
+        parseTbl.printParseTable();
 
+        List<String> input = new ArrayList<>();
+        File myObj = new File("app/src/main/resources/test.vc");
+        Scanner myReader = null;
+        try {
+            myReader = new Scanner(myObj);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        while (myReader.hasNextLine()) {
+            String data = myReader.nextLine().trim();
+            String[] dat = data.split(" ");
+            input.addAll(List.of(dat));
+        }
+        System.out.println(parse2(input, parseTable, start));
 
     }
 
