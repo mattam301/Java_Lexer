@@ -7,12 +7,14 @@ import java.util.Set;
 
 public class ParseTableUtil {
 
+    private static Map<String, Map<String, List<String>>> parseTable;
+
     public static Map<String, Map<String, List<String>>> getParseTable(
             Map<String, List<List<String>>> grammar,
             Map<String, Set<String>> firstSets,
             Map<String, Set<String>> followSets
     ) {
-        Map<String, Map<String, List<String>>> parseTable = new HashMap<>();
+        parseTable = new HashMap<>();
         for (String nonTerminal : grammar.keySet()) {
             parseTable.put(nonTerminal, new HashMap<>());
             for (List<String> production : grammar.get(nonTerminal)) {
