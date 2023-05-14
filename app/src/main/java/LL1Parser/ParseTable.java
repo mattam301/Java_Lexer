@@ -184,8 +184,29 @@ public class ParseTable {
         firstSets = generator.getFirstSets();
         followSets = generator.getFollowSets();
 
+//        for (String s : grammar.keySet()) {
+//            System.out.print(s + " -> ");
+//            int c = grammar.get(s).size();
+//            for (List<String> list1 : grammar.get(s)) {
+//                for (String str : list1) {
+//                    System.out.print(str + " ");
+//                }
+//                if (c > 1) {
+//                    System.out.print(" | ");
+//                    c--;
+//                }
+//            }
+//            System.out.println();
+//        }
+
+//        for (String s : followSets.keySet()) {
+//            System.out.println(s + ": " + followSets.get(s));
+//        }
+
         parseTbl.generateParseTable();
         parseTbl.printParseTable();
+
+//        System.out.println(parse2("x=1+1", parseTable, start));
 
 
     }
