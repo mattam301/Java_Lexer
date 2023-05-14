@@ -1,9 +1,6 @@
 package LL1Parser;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 import LL1Parser.model.Grammar;
@@ -182,7 +179,7 @@ public class ParseTable {
         return true;
     }
 
-    public Node parse(String input, Map<String, Map<String, List<String>>> parseTable, String startSymbol) {
+    public static Node parse(List<String> input, Map<String, Map<String, List<String>>> parseTable, String startSymbol) {
         Stack<Node> stack = new Stack<>();
         stack.push(new Node("$"));
         Node startNode = new Node(startSymbol);
@@ -191,14 +188,14 @@ public class ParseTable {
         int i = 0;
         while (!stack.isEmpty()) {
             Node top = stack.peek();
-            if (top.symbol.equals("$") && i == input.length()) {
+            if (top.symbol.equals("$") && i == input.size()) {
                 return startNode;
-            } else if (top.symbol.equals(input.charAt(i) + "")) {
+            } else if (top.symbol.equals(input.get(i))) {
                 stack.pop();
                 i++;
-            } else if (parseTable.containsKey(top.symbol) && parseTable.get(top.symbol).containsKey(input.charAt(i) + "")) {
+            } else if (parseTable.containsKey(top.symbol) && parseTable.get(top.symbol).containsKey(input.get(i))) {
                 stack.pop();
-                List<String> production = parseTable.get(top.symbol).get(input.charAt(i) + "");
+                List<String> production = parseTable.get(top.symbol).get(input.get(i));
                 for (int j = production.size() - 1; j >= 0; j--) {
                     if (!production.get(j).equals("epsilon")) {
                         Node child = new Node(production.get(j));
@@ -261,23 +258,74 @@ public class ParseTable {
             String[] dat = data.split(" ");
             input.addAll(List.of(dat));
         }
-        System.out.println(parse(input));
+        generateDotFile(parse(input, parseTable, start), "ast.dot");
 
 //        for (String s : table.keySet()) {
 //            System.out.println(s + ": " + table.get(s));
 //        }
 
+        String absPath = "D:\\Java_Lexer\\";
 
+        dotToPng(absPath + "ast.dot", "ast.png");
 
     }
 
-    class Node {
+    static class Node {
         String symbol;
         List<Node> children;
 
         public Node(String symbol) {
             this.symbol = symbol;
             this.children = new ArrayList<>();
+        }
+    }
+
+    public static void traverse(Node root) {
+        if (root == null) {
+            return;
+        }
+        // Process the current node
+        System.out.println(root.symbol);
+        // Recursively traverse the children of the current node
+        for (Node child : root.children) {
+            traverse(child);
+        }
+    }
+
+    public static void generateDotFile(Node root, String filename) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(filename))) {
+            writer.println("digraph AST {");
+            generateDotFile(root, writer);
+            writer.println("}");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void generateDotFile(Node node, PrintWriter writer) {
+        if (node == null) {
+            return;
+        }
+        // Generate a unique identifier for the current node
+        String nodeId = "node" + System.identityHashCode(node);
+        // Write the current node to the DOT file
+        writer.println(nodeId + " [label=\"" + node.symbol + "\"];");
+        // Recursively generate DOT code for the children of the current node
+        for (Node child : node.children) {
+            generateDotFile(child, writer);
+            // Write an edge from the current node to its child
+            String childId = "node" + System.identityHashCode(child);
+            writer.println(nodeId + " -> " + childId + ";");
+        }
+    }
+
+    public static void dotToPng(String dotFilename, String pngFilename) {
+        try {
+            String dotPath = "C:\\Program Files\\Graphviz\\bin\\dot.exe";
+            String cmd = dotPath + " -Tpng " + dotFilename + " -o " + pngFilename;
+            Runtime.getRuntime().exec(cmd);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
