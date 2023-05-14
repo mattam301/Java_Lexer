@@ -160,10 +160,12 @@ public class ParseTable {
                 stack.pop();
                 i++;
             } else if (!parseTable.containsKey(top)) {
+                System.out.println(top);
                 return false;
             } else {
                 Map<String, List<String>> row = parseTable.get(top);
                 if (!row.containsKey(currentInput)) {
+                    System.out.println(currentInput);
                     return false;
                 } else {
                     List<String> production = row.get(currentInput);
@@ -224,6 +226,8 @@ public class ParseTable {
 //            System.out.println(s + " : " + grammar.get(s));
 //        }
 
+//        System.out.println(followSets.get("<init_declarator_temp>"));
+
 //        for (String s : grammar.keySet()) {
 //            System.out.print(s + " -> ");
 //            int c = grammar.get(s).size();
@@ -241,12 +245,7 @@ public class ParseTable {
 
 
         parseTbl.generateParseTable();
-        parseTbl.printParseTable();
-
-
-
-        LL1Parser ll1Parser = new LL1Parser(firstSets, followSets, grammar);
-        Map<String, Map<String, List<String>>> table = ll1Parser.getParseTable();
+//        parseTbl.printParseTable();
 
 
         List<String> input = new ArrayList<>();

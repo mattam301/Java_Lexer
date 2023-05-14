@@ -51,61 +51,39 @@ public class FirstFollowSetsGenerator {
         }
     }
 
-    private void generateFollowSets() {
-        for (String nonTerminal : grammar.keySet()) {
-            followSets.put(nonTerminal, new HashSet<>());
-        }
-        String startSymbol = grammar.keySet().iterator().next();
-        followSets.get(startSymbol).add("$");
+    public void generateFollowSets() {
+        followSets.put("<program>", new HashSet<>(List.of("$")));
         boolean changed = true;
         while (changed) {
             changed = false;
-            for (Map.Entry<String, List<List<String>>> entry : grammar.entrySet()) {
-                String nonTerminal = entry.getKey();
-                List<List<String>> rhsList = entry.getValue();
-                for (List<String> rhs : rhsList) {
-                    for (int i = 0; i < rhs.size(); i++) {
-                        String symbol = rhs.get(i);
+            for (String nonTerminal : grammar.keySet()) {
+                if (!followSets.containsKey(nonTerminal)) {
+                    followSets.put(nonTerminal, new HashSet<>());
+                }
+                for (List<String> production : grammar.get(nonTerminal)) {
+                    for (int i = 0; i < production.size(); i++) {
+                        String symbol = production.get(i);
                         if (grammar.containsKey(symbol)) {
-                            Set<String> followSet = followSets.get(symbol);
-                            int oldSize = followSet.size();
-                            if (i == rhs.size() - 1) {
-                                followSet.addAll(followSets.get(nonTerminal));
+                            if (!followSets.containsKey(symbol)) {
+                                followSets.put(symbol, new HashSet<>());
+                            }
+                            int oldSize = followSets.get(symbol).size();
+                            if (i == production.size() - 1) {
+                                followSets.get(symbol).addAll(followSets.get(nonTerminal));
                             } else {
-                                String nextSymbol = rhs.get(i + 1);
-                                Set<String> firstSetOfNextSymbol = firstSets.get(nextSymbol);
-                                if (firstSetOfNextSymbol != null) {
-                                    for (String terminal : firstSetOfNextSymbol) {
-                                        if (!terminal.equals("EPSILON")) {
-                                            followSet.add(terminal);
-                                        }
-                                    }
-                                    int j = i + 1;
-                                    while (j < rhs.size() && firstSetOfNextSymbol.contains("EPSILON")) {
-                                        j++;
-                                        if (j < rhs.size()) {
-                                            nextSymbol = rhs.get(j);
-                                            firstSetOfNextSymbol = firstSets.get(nextSymbol);
-                                            if (firstSetOfNextSymbol != null) {
-                                                for (String terminal : firstSetOfNextSymbol) {
-                                                    if (!terminal.equals("EPSILON")) {
-                                                        followSet.add(terminal);
-                                                    }
-                                                }
-                                            } else {
-                                                followSet.add(nextSymbol);
-                                                break;
-                                            }
-                                        } else if (j == rhs.size()) {
-                                            followSet.addAll(followSets.get(nonTerminal));
-                                        }
+                                String nextSymbol = production.get(i + 1);
+                                if (firstSets.containsKey(nextSymbol)) {
+                                    Set<String> tempFirstSet = new HashSet<>(firstSets.get(nextSymbol));
+                                    tempFirstSet.remove("epsilon");
+                                    followSets.get(symbol).addAll(tempFirstSet);
+                                    if (firstSets.get(nextSymbol).contains("epsilon")) {
+                                        followSets.get(symbol).addAll(followSets.get(nonTerminal));
                                     }
                                 } else {
-                                    followSet.add(nextSymbol);
+                                    followSets.get(symbol).add(nextSymbol);
                                 }
                             }
-                            int newSize = followSet.size();
-                            if (newSize > oldSize) {
+                            if (followSets.get(symbol).size() > oldSize) {
                                 changed = true;
                             }
                         }
@@ -114,6 +92,7 @@ public class FirstFollowSetsGenerator {
             }
         }
     }
+
 
 
     public Map<String, Set<String>> getFirstSets() {
