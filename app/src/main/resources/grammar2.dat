@@ -111,11 +111,11 @@
     },
     {
       "left": "<init_declarator_temp>",
-      "right": ["epsilon"]
+      "right": ["=", "<initializer>"]
     },
     {
       "left": "<init_declarator_temp>",
-      "right": ["=", "<initializer>"]
+      "right": ["epsilon"]
     },
     {
       "left": "<type_specifier>",
@@ -387,11 +387,11 @@
     },
     {
       "left": "<block_item_list_temp>",
-      "right": ["epsilon"]
+      "right": ["<block_item_list>"]
     },
     {
       "left": "<block_item_list_temp>",
-      "right": ["<block_item_list>"]
+      "right": ["epsilon"]
     },
 
     {
@@ -424,11 +424,11 @@
     },
     {
       "left": "<selection_statement_temp>",
-      "right": ["epsilon"]
+      "right": ["else", "<statement>"]
     },
     {
       "left": "<selection_statement_temp>",
-      "right": ["else", "<statement>"]
+      "right": ["epsilon"]
     },
 
     {

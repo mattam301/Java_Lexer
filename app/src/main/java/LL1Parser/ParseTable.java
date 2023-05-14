@@ -109,23 +109,23 @@ public class ParseTable {
         return tokenizedInput.toString().trim();
     }
 
-    public static boolean parse2(String input, Map<String, Map<String, List<String>>> parseTable, String startSymbol) {
-        input += '$';
+    public static boolean parse2(List<String> tokens, Map<String, Map<String, List<String>>> parseTable, String startSymbol) {
+        tokens.add("$");
         Stack<String> stack = new Stack<>();
         stack.push("$");
         stack.push(startSymbol);
 
-        input = tokenize(input);
-        String[] tokens = input.split("\\s+");
+//        input = tokenize(input);
+//        String[] tokens = input.split("\\s+");
 
         int i = 0;
         while (!stack.isEmpty()) {
             String top = stack.peek();
-            if (top.equals("$") && i == input.length()) {
+            if (top.equals("$") && i == tokens.size()) {
                 return true;
             }
 
-            String current = tokens[i];
+            String current = tokens.get(i);
 
             while (!top.equals(current)) {
                 if (!parseTable.get(top).containsKey(current)) {
