@@ -1,5 +1,7 @@
 package LL1Parser;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
@@ -28,7 +30,7 @@ public class ParseTable {
         grammar = new LinkedHashMap<>();
         terminals = new ArrayList<>();
         nonTerminals = new ArrayList<>();
-        parseTable = new HashMap<>();
+        parseTable = new LinkedHashMap<>();
 
         ObjectMapper mapper = new ObjectMapper();
         try {
@@ -168,7 +170,7 @@ public class ParseTable {
                     stack.pop();
                     for (int j = production.size() - 1; j >= 0; j--) {
                         String symbol = production.get(j);
-                        if (!symbol.equals("EPSILON")) {
+                        if (!symbol.equals("epsilon")) {
                             stack.push(symbol);
                         }
                     }
@@ -222,27 +224,45 @@ public class ParseTable {
 //            System.out.println(s + " : " + grammar.get(s));
 //        }
 
-        for (String s : grammar.keySet()) {
-            System.out.print(s + " -> ");
-            int c = grammar.get(s).size();
-            for (List<String> list1 : grammar.get(s)) {
-                for (String str : list1) {
-                    System.out.print(str + " ");
-                }
-                if (c > 1) {
-                    System.out.print(" | ");
-                    c--;
-                }
-            }
-            System.out.println();
-        }
+//        for (String s : grammar.keySet()) {
+//            System.out.print(s + " -> ");
+//            int c = grammar.get(s).size();
+//            for (List<String> list1 : grammar.get(s)) {
+//                for (String str : list1) {
+//                    System.out.print(str + " ");
+//                }
+//                if (c > 1) {
+//                    System.out.print(" | ");
+//                    c--;
+//                }
+//            }
+//            System.out.println();
+//        }
 
 
         parseTbl.generateParseTable();
-//        parseTbl.printParseTable();
+        parseTbl.printParseTable();
+
+
+
         LL1Parser ll1Parser = new LL1Parser(firstSets, followSets, grammar);
         Map<String, Map<String, List<String>>> table = ll1Parser.getParseTable();
 
+
+        List<String> input = new ArrayList<>();
+        File myObj = new File("app/src/main/resources/test.vc");
+        Scanner myReader = null;
+        try {
+            myReader = new Scanner(myObj);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        while (myReader.hasNextLine()) {
+            String data = myReader.nextLine().trim();
+            String[] dat = data.split(" ");
+            input.addAll(List.of(dat));
+        }
+        System.out.println(parse(input));
 
 //        for (String s : table.keySet()) {
 //            System.out.println(s + ": " + table.get(s));

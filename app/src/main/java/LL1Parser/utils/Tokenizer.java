@@ -80,8 +80,11 @@ public class Tokenizer {
 
         List<Token> tokens = tokenize(sourceCode);
 
-        for (Token token : tokens) {
-            System.out.println(token);
-        }
+//        for (Token token : tokens) {
+//            System.out.println(token);
+//        }
+
+
+
     }
 }

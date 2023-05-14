@@ -37,7 +37,7 @@
     },
     {
       "left": "<parameter_list_temp>",
-      "right": ["EPSILON"]
+      "right": ["epsilon"]
     },
     {
       "left": "<parameter_list>",
@@ -53,7 +53,7 @@
     },
     {
       "left": "<parameter_list_question>",
-      "right": ["EPSILON"]
+      "right": ["epsilon"]
     },
 
     {
@@ -66,7 +66,7 @@
     },
     {
       "left": "<argument_list_temp>",
-      "right": ["EPSILON"]
+      "right": ["epsilon"]
     },
     {
       "left": "<argument_list>",
@@ -82,7 +82,7 @@
     },
     {
       "left": "<argument_list_question>",
-      "right": ["EPSILON"]
+      "right": ["epsilon"]
     },
 
     {
@@ -95,7 +95,7 @@
     },
     {
       "left": "<init_declarator_list_temp>",
-      "right": ["EPSILON"]
+      "right": ["epsilon"]
     },
     {
       "left": "<init_declarator_list>",
@@ -111,7 +111,7 @@
     },
     {
       "left": "<init_declarator_temp>",
-      "right": ["EPSILON"]
+      "right": ["epsilon"]
     },
     {
       "left": "<init_declarator_temp>",
@@ -139,7 +139,7 @@
     },
     {
       "left": "<declarator_tail>",
-      "right": ["EPSILON"]
+      "right": ["epsilon"]
     },
     {
       "left": "<declarator_int>",
@@ -147,7 +147,7 @@
     },
     {
       "left": "<declarator_int>",
-      "right": ["EPSILON"]
+      "right": ["epsilon"]
     },
     {
       "left": "<declarator>",
@@ -177,7 +177,7 @@
     },
     {
       "left": "<primary_expression_tail>",
-      "right": ["EPSILON"]
+      "right": ["epsilon"]
     },
     {
       "left": "<primary_expression>",
@@ -240,7 +240,7 @@
     },
     {
       "left": "<multiplicative_expression_temp>",
-      "right": ["EPSILON"]
+      "right": ["epsilon"]
     },
     {
       "left": "<multiplicative_expression>",
@@ -257,7 +257,7 @@
     },
     {
       "left": "<additive_expression_temp>",
-      "right": ["EPSILON"]
+      "right": ["epsilon"]
     },
     {
       "left": "<additive_expression>",
@@ -282,7 +282,7 @@
     },
     {
       "left": "<relational_expression_temp>",
-      "right": ["EPSILON"]
+      "right": ["epsilon"]
     },
     {
       "left": "<relational_expression>",
@@ -299,7 +299,7 @@
     },
     {
       "left": "<equality_expression_temp>",
-      "right": ["EPSILON"]
+      "right": ["epsilon"]
     },
     {
       "left": "<equality_expression>",
@@ -312,7 +312,7 @@
     },
     {
       "left": "<assignment_expression_temp>",
-      "right": ["EPSILON"]
+      "right": ["epsilon"]
     },
     {
       "left": "<assignment_expression>",
@@ -329,7 +329,7 @@
     },
     {
       "left": "<expression_question>",
-      "right": ["EPSILON"]
+      "right": ["epsilon"]
     },
 
     {
@@ -383,11 +383,11 @@
     },
     {
       "left": "<block_item_list>",
-      "right": ["EPSILON"]
+      "right": ["epsilon"]
     },
     {
       "left": "<block_item_list_temp>",
-      "right": ["EPSILON"]
+      "right": ["epsilon"]
     },
     {
       "left": "<block_item_list_temp>",
@@ -424,7 +424,7 @@
     },
     {
       "left": "<selection_statement_temp>",
-      "right": ["EPSILON"]
+      "right": ["epsilon"]
     },
     {
       "left": "<selection_statement_temp>",

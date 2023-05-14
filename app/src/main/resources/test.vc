@@ -1,0 +1,3 @@
+void main () {
+  integer_constant + integer_constant - integer_constant + integer_constant;
+}
