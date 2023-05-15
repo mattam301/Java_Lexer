@@ -79,4 +79,76 @@ public class ParseTableUtil {
         firstSets = generator.getFirstSets();
         followSets = generator.getFollowSets();
     }
+
+    public static Map<String, Set<String>> getFirstSets() {
+        return firstSets;
+    }
+
+    public static void setFirstSets(Map<String, Set<String>> firstSets) {
+        ParseTableUtil.firstSets = firstSets;
+    }
+
+    public static Map<String, Set<String>> getFollowSets() {
+        return followSets;
+    }
+
+    public static void setFollowSets(Map<String, Set<String>> followSets) {
+        ParseTableUtil.followSets = followSets;
+    }
+
+    public static Map<String, List<List<String>>> getGrammar() {
+        return grammar;
+    }
+
+    public static void setGrammar(Map<String, List<List<String>>> grammar) {
+        ParseTableUtil.grammar = grammar;
+    }
+
+    public static Grammar getRawGrammar() {
+        return rawGrammar;
+    }
+
+    public static void setRawGrammar(Grammar rawGrammar) {
+        ParseTableUtil.rawGrammar = rawGrammar;
+    }
+
+    public static Rules[] getRules() {
+        return rules;
+    }
+
+    public static void setRules(Rules[] rules) {
+        ParseTableUtil.rules = rules;
+    }
+
+    public static List<String> getTerminals() {
+        return terminals;
+    }
+
+    public static void setTerminals(List<String> terminals) {
+        ParseTableUtil.terminals = terminals;
+    }
+
+    public static List<String> getNonTerminals() {
+        return nonTerminals;
+    }
+
+    public static void setNonTerminals(List<String> nonTerminals) {
+        ParseTableUtil.nonTerminals = nonTerminals;
+    }
+
+    public static String getStart() {
+        return start;
+    }
+
+    public static void setStart(String start) {
+        ParseTableUtil.start = start;
+    }
+
+    public static Map<String, Map<String, List<String>>> getParseTable() {
+        return parseTable;
+    }
+
+    public static void setParseTable(Map<String, Map<String, List<String>>> parseTable) {
+        ParseTableUtil.parseTable = parseTable;
+    }
 }

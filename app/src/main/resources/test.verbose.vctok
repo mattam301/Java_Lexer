@@ -1,0 +1,17 @@
+Tokens:
+Kind = 1 [Keyword], spelling = "void", position = 1(1)..1(4)
+Kind = 1 [Identifier], spelling = "identifier", position = 1(6)..1(15)
+Kind = 15 [Separator], spelling = "(", position = 1(17)..1(17)
+Kind = 15 [Separator], spelling = ")", position = 1(19)..1(19)
+Kind = 15 [Separator], spelling = "{", position = 1(21)..1(21)
+Kind = 1 [Identifier], spelling = "integer_constant", position = 2(3)..2(18)
+Kind = 14 [Arithmetic_Operators], spelling = "+", position = 2(20)..2(20)
+Kind = 1 [Identifier], spelling = "integer_constant", position = 2(22)..2(37)
+Kind = 14 [Arithmetic_Operators], spelling = "-", position = 2(39)..2(39)
+Kind = 1 [Identifier], spelling = "integer_constant", position = 2(41)..2(56)
+Kind = 14 [Arithmetic_Operators], spelling = "+", position = 2(58)..2(58)
+Kind = 1 [Identifier], spelling = "integer_constant", position = 2(60)..2(75)
+Kind = 15 [Separator], spelling = ";", position = 2(77)..2(77)
+Kind = 15 [Separator], spelling = "}", position = 3(0)..3(0)
+
+There's no errors !!!

@@ -1,5 +1,9 @@
 package LexicalScanner;
 
+import LL1Parser.Constant;
+import LL1Parser.Parser;
+import LL1Parser.utils.ParseTableUtil;
+
 import java.io.*;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -124,7 +128,13 @@ public class LexicalScanner {
         toOutput(output, tokens, errors);
         toVctok(filename, spelling);
 
-        tokenize(stateNames, spelling);
+        Parser parser = new Parser(
+                ParseTableUtil.generateParseTable(Constant.grammarPath),
+                ParseTableUtil.getStart(), tokenize(stateNames, spelling));
+        String fileName = "ast.dot";
+        parser.generateDotFile(fileName);
+        parser.generateTreePng(fileName);
+
 
         reader.close();
     }

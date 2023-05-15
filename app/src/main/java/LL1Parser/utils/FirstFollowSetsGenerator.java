@@ -5,7 +5,7 @@ import java.util.*;
 public class FirstFollowSetsGenerator {
 
     private static final String EPSILON = "epsilon";
-    private Map<String, List<List<String>>> grammar;
+    private static Map<String, List<List<String>>> grammar;
     private static Map<String, Set<String>> firstSets;
     private static Map<String, Set<String>> followSets;
 

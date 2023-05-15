@@ -12,12 +12,19 @@ import java.util.*;
 public class Parser {
 
     private static Map<String, Map<String, List<String>>> parseTable;
+    private static Node startNode;
+    private static String startSymbol;
 
+    public Parser(Map<String, Map<String, List<String>>> parseTable, String startSymbol, List<String> input) {
+        this.parseTable = parseTable;
+        this.startSymbol = startSymbol;
+        parse(input, parseTable);
+    }
 
-    public static Node parse(List<String> input, Map<String, Map<String, List<String>>> parseTable, String startSymbol) {
+    private static Node parse(List<String> input, Map<String, Map<String, List<String>>> parseTable) {
         Stack<Node> stack = new Stack<>();
         stack.push(new Node("$"));
-        Node startNode = new Node(startSymbol);
+        startNode = new Node(startSymbol);
         stack.push(startNode);
 
         int i = 0;
@@ -46,13 +53,25 @@ public class Parser {
         return null;
     }
 
-    private static void generateDotFile(Node root, String filename) {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(filename))) {
+    public static void generateDotFile(String fileName) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
             writer.println("digraph AST {");
-            generateDotFile(root, writer);
+            generateDotFile(startNode, writer);
             writer.println("}");
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public static void generateTreePng(String filePath) {
+        MutableGraph graph;
+        try {
+            graph = new guru.nidi.graphviz.parse.Parser().read(new File(filePath));
+            String pngFileName = "ast.png";
+            Graphviz.fromGraph(graph).render(Format.PNG).toFile(new File(pngFileName));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+
         }
     }
 
@@ -73,33 +92,54 @@ public class Parser {
         }
     }
 
-    public static void main(String[] args) {
-        parseTable = ParseTableUtil.generateParseTable(Constant.grammarPath);
-        List<String> input = new ArrayList<>();
-        File myObj = new File("app/src/main/resources/test.vc");
-        Scanner myReader = null;
-        try {
-            myReader = new Scanner(myObj);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+    public static String addParentheses(Node node) {
+        if (node == null) {
+            return "";
         }
-        while (myReader.hasNextLine()) {
-            String data = myReader.nextLine().trim();
-            String[] dat = data.split(" ");
-            input.addAll(List.of(dat));
+        StringBuilder sb = new StringBuilder();
+        if (node.getChildren().size() == 0) {
+            // Leaf node
+            sb.append(node.getSymbol());
+        } else if (node.getChildren().size() == 1) {
+            // Unary operator
+            sb.append(node.getSymbol());
+            sb.append(addParentheses(node.getChildren().get(0)));
+        } else {
+            // Binary operator
+            boolean addParens = false;
+            for (Node child : node.getChildren()) {
+                if (containsSymbol(child, "integer_constant") || containsSymbol(child, "float_constant")) {
+                    addParens = true;
+                    break;
+                }
+            }
+            if (addParens) {
+                sb.append("(");
+            }
+            sb.append(addParentheses(node.getChildren().get(0)));
+            sb.append(" ");
+            sb.append(node.getSymbol());
+            sb.append(" ");
+            sb.append(addParentheses(node.getChildren().get(1)));
+            if (addParens) {
+                sb.append(")");
+            }
         }
-        parseTable = ParseTableUtil.generateParseTable("app/src/main/resources/grammar2.dat");
+        return sb.toString();
+    }
 
-        String dotFileName = "ast.dot";
-        generateDotFile(parse(input, parseTable, "<program>"), dotFileName);
-
-        MutableGraph graph;
-        try {
-            graph = new guru.nidi.graphviz.parse.Parser().read(new File(dotFileName));
-            String pngFileName = "ast.png";
-            Graphviz.fromGraph(graph).render(Format.PNG).toFile(new File(pngFileName));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    private static boolean containsSymbol(Node node, String symbol) {
+        if (node == null) {
+            return false;
         }
+        if (node.getSymbol().equals(symbol)) {
+            return true;
+        }
+        for (Node child : node.getChildren()) {
+            if (containsSymbol(child, symbol)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
