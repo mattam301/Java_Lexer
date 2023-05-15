@@ -11,7 +11,7 @@ dependencies {
     implementation("com.google.guava:guava:30.1.1-jre")
     implementation 'com.googlecode.json-simple:json-simple:1.1.1'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.0'
-    compileOnly 'org.projectlombok:lombok:1.18.26'
+    implementation 'guru.nidi:graphviz-java:0.18.1'
 
 }
 

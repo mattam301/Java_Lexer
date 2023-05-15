@@ -8,7 +8,10 @@ import LL1Parser.model.Rules;
 import LL1Parser.utils.FirstFollowSetsGenerator;
 import LL1Parser.utils.LL1Parser;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+import guru.nidi.graphviz.engine.Format;
+import guru.nidi.graphviz.engine.Graphviz;
+import guru.nidi.graphviz.model.MutableGraph;
+import guru.nidi.graphviz.parse.Parser;
 
 
 public class ParseTable {
@@ -258,15 +261,19 @@ public class ParseTable {
             String[] dat = data.split(" ");
             input.addAll(List.of(dat));
         }
-        generateDotFile(parse(input, parseTable, start), "ast.dot");
+//        String path = "resources/";
+        String dotFileName = "ast.dot";
+        generateDotFile(parse(input, parseTable, start), dotFileName);
 
-//        for (String s : table.keySet()) {
-//            System.out.println(s + ": " + table.get(s));
-//        }
+        MutableGraph graph;
+        try {
+            graph = new Parser().read(new File(dotFileName));
+            String pngFileName = "ast.png";
+            Graphviz.fromGraph(graph).render(Format.PNG).toFile(new File(pngFileName));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
-        String absPath = "D:\\Java_Lexer\\";
-
-        dotToPng(absPath + "ast.dot", "ast.png");
 
     }
 
@@ -319,14 +326,5 @@ public class ParseTable {
         }
     }
 
-    public static void dotToPng(String dotFilename, String pngFilename) {
-        try {
-            String dotPath = "C:\\Program Files\\Graphviz\\bin\\dot.exe";
-            String cmd = dotPath + " -Tpng " + dotFilename + " -o " + pngFilename;
-            Runtime.getRuntime().exec(cmd);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }
 
