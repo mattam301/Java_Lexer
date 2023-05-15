@@ -1,7 +1,5 @@
 package LL1Parser.utils;
 
-import LL1Parser.ParseTable;
-
 import java.util.*;
 
 public class FirstFollowSetsGenerator {
@@ -51,7 +49,7 @@ public class FirstFollowSetsGenerator {
         }
     }
 
-    public void generateFollowSets() {
+    private void generateFollowSets() {
         followSets.put("<program>", new HashSet<>(List.of("$")));
         boolean changed = true;
         while (changed) {
