@@ -231,7 +231,14 @@ public class ParseTable {
         return null;
     }
 
+    public static void parseTest() {
+        ParseTable parseTbl = new ParseTable("src/main/resources/grammar2.dat");
+        firstSets = FirstFollowSetsGenerator.calculateFirstSets(grammar, terminals);
+        followSets = FirstFollowSetsGenerator.calculateFollowSets(grammar, terminals, start);
 
+        parseTbl.generateParseTable();
+        System.out.println(parse2(input, parseTable, start));
+    }
 
     public static void main(String[] args) {
 

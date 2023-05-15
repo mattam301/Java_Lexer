@@ -1,5 +1,5 @@
 // this is a comment
-void main () {
+void main() {
     boolean a;
     a = 1;
 }

@@ -31,7 +31,7 @@ gradle run --args="file.vc"
 
 Ví dụ:
 ```bash
-gradle run --args="example_fib.vc"
+gradle run --args="sample_pschain.vc"
 ```
 
 ### Đầu ra

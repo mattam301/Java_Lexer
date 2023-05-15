@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import java.io.IOException;
 
+import static LL1Parser.ParseTable.parseTest;
 import static LL1Parser.ParseTable.tokenizer;
 
 public class LexicalScanner {
@@ -123,7 +124,10 @@ public class LexicalScanner {
 //        toOutput(System.out, tokens, errors);
         toOutput(output, tokens, errors);
         toVctok(filename, spelling);
+
         tokenizer(stateNames, spelling);
+        parseTest();
+
         reader.close();
     }
 
