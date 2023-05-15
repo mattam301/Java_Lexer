@@ -25,6 +25,8 @@ public class ParseTable {
     private static List<String> nonTerminals;
     private static String start;
 
+    private static List<String> input;
+
     public ParseTable(String datFile) {
         grammar = new LinkedHashMap<>();
         terminals = new ArrayList<>();
@@ -82,6 +84,23 @@ public class ParseTable {
     public void printParseTable() {
         for (String nonTerminal : parseTable.keySet()) {
             System.out.println(nonTerminal + ": " + parseTable.get(nonTerminal));
+        }
+    }
+
+    public static void tokenizer(List<String> stateNames, List<String> spelling) {
+        input = new ArrayList<>();
+
+        for (int i = 0; i < stateNames.size(); i++) {
+            if (stateNames.get(i).equals("Comment")) {
+                continue;
+            }
+            switch (stateNames.get(i)) {
+                case "Identifier" -> input.add("identifier");
+                case "String_Literal" -> input.add("string_constant");
+                case "Integer_Literal" -> input.add("integer_constant");
+                case "Float_Literal" -> input.add("float_constant");
+                default -> input.add(spelling.get(i));
+            }
         }
     }
 

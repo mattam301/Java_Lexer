@@ -1,0 +1,14 @@
+// this is a comment
+void
+main
+(
+)
+{
+boolean
+a
+;
+a
+=
+1
+;
+}

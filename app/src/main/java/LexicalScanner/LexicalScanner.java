@@ -6,6 +6,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import java.io.IOException;
 
+import static LL1Parser.ParseTable.tokenizer;
+
 public class LexicalScanner {
 
     private static final Pattern WHITESPACE_PATTERN = Pattern.compile("\\s");
@@ -86,6 +88,7 @@ public class LexicalScanner {
         State state = this.initialState;
         StringBuilder token = new StringBuilder();
         List<String> tokens = new ArrayList<>();
+        List<String> stateNames = new ArrayList<>();
         List<String> spelling = new ArrayList<>();
         List<String> errors = new ArrayList<>();
         int line = 1;
@@ -99,7 +102,7 @@ public class LexicalScanner {
                 token.append(c);
                 state = nextState;
             } else {
-                handleNoNextState(state, token.toString(), c, line, pos, tokens, spelling, errors);
+                handleNoNextState(state, token.toString(), c, line, pos, tokens, stateNames, spelling, errors);
                 token.setLength(0);
                 if (state != this.initialState) {
                     reader.unread(c);
@@ -114,12 +117,13 @@ public class LexicalScanner {
             }
         }
         if (token.length() > 0) {
-            handleNoNextState(state, token.toString(), Character.MIN_VALUE, line, pos, tokens, spelling, errors);
+            handleNoNextState(state, token.toString(), Character.MIN_VALUE, line, pos, tokens,stateNames, spelling, errors);
         }
 
 //        toOutput(System.out, tokens, errors);
         toOutput(output, tokens, errors);
         toVctok(filename, spelling);
+        tokenizer(stateNames, spelling);
         reader.close();
     }
 
@@ -128,7 +132,7 @@ public class LexicalScanner {
      * determine whether this <code>state</code> is ending state or not and act accordingly.
      */
     private void handleNoNextState(State state, String token, char nextChar, int line, int pos,
-            List<String> tokens, List<String> spelling, List<String> errors) {
+            List<String> tokens, List<String> stateNames, List<String> spelling, List<String> errors) {
         if (state.isEnd()) {
             String beautifiedToken = token.replace("\n", "\\n");
 
@@ -139,6 +143,7 @@ public class LexicalScanner {
             int stateIdx = state.getStateIdx();
             tokens.add(String.format("Kind = %d [%s], spelling = \"%s\", position = %d(%d)..%d(%d)",
                     stateIdx, stateName, beautifiedToken, line, pos - beautifiedToken.length(), line, pos - 1));
+            stateNames.add(stateName);
             spelling.add(beautifiedToken);
 
         } else if (!(match(nextChar, WHITESPACE_PATTERN) && state == initialState)) {
