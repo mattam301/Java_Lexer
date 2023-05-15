@@ -1,0 +1,3 @@
+void identifier ( ) {
+  integer_constant + integer_constant - integer_constant + integer_constant ;
+}

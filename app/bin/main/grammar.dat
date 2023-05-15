@@ -1,0 +1,370 @@
+<grammar>
+  <terminals>
+    <terminal>(</terminal>
+    <terminal>)</terminal>
+    <terminal>{</terminal>
+    <terminal>}</terminal>
+    <terminal>*</terminal>
+    <terminal>+</terminal>
+    <terminal>-</terminal>
+    <terminal>/</terminal>
+    <terminal>%</terminal>
+    <terminal>,</terminal>
+    <terminal>lesser</terminal>
+    <terminal>greater</terminal>
+    <terminal><=</terminal>
+    <terminal>>=</terminal>
+    <terminal>=</terminal>
+    <terminal>==</terminal>
+    <terminal>!</terminal>
+    <terminal>!=</terminal>
+    <terminal>;</terminal>
+    <terminal>[</terminal>
+    <terminal>]</terminal>
+    <terminal>identifier</terminal>
+    <terminal>integer_constant</terminal>
+    <terminal>float_constant</terminal>
+    <terminal>boolean_constant</terminal>
+    <terminal>string_constant</terminal>
+    <terminal>for</terminal>
+    <terminal>while</terminal>
+    <terminal>break</terminal>
+    <terminal>continue</terminal>
+    <terminal>return</terminal>
+    <terminal>else</terminal>
+    <terminal>float</terminal>
+    <terminal>if</terminal>
+    <terminal>int</terminal>
+    <terminal>void</terminal>
+    <terminal>boolean</terminal>
+  </terminals>
+
+  <nonterminals>
+    <nonterminal>primary_expression</nonterminal>
+    <nonterminal>constant</nonterminal>
+    <nonterminal>unary_operator</nonterminal>
+    <nonterminal>unary_expression</nonterminal>
+    <nonterminal>type_specifier</nonterminal>
+    <nonterminal>multiplicative_expression</nonterminal>
+    <nonterminal>additive_expression</nonterminal>
+    <nonterminal>relational_expression</nonterminal>
+    <nonterminal>equality_expression</nonterminal>
+    <nonterminal>assignment_expression</nonterminal>
+    <nonterminal>expression</nonterminal>
+    <nonterminal>declarator_tail</nonterminal>
+    <nonterminal>declaration</nonterminal>
+    <nonterminal>init_declarator_list</nonterminal>
+    <nonterminal>init_declarator</nonterminal>
+    <nonterminal>initializer</nonterminal>
+    <nonterminal>declarator</nonterminal>
+    <nonterminal>direct_declarator</nonterminal>
+    <nonterminal>declarator_int</nonterminal>
+    <nonterminal>statement</nonterminal>
+    <nonterminal>compound_statement</nonterminal>
+    <nonterminal>block_item_list</nonterminal>
+    <nonterminal>block_item</nonterminal>
+    <nonterminal>expression_statement</nonterminal>
+    <nonterminal>selection_statement</nonterminal>
+    <nonterminal>program</nonterminal>
+    <nonterminal>primary_expression_tail</nonterminal>
+    <nonterminal>for_statement</nonterminal>
+    <nonterminal>while_statement</nonterminal>
+    <nonterminal>expression_question</nonterminal>
+    <nonterminal>break_statement</nonterminal>
+    <nonterminal>continue_statement</nonterminal
+    <nonterminal>return_statement</nonterminal>
+    <nonterminal>argument_list</nonterminal>
+    <nonterminal>argument</nonterminal>
+    <nonterminal>parameter_list</nonterminal>
+    <nonterminal>parameter</nonterminal>
+    <nonterminal>argument_list_temp</nonterminal>
+    <nonterminal>assignment_expression_temp</nonterminal>
+    <nonterminal>multiplicative_expression_temp</nonterminal>
+    <nonterminal>init_declarator_list_temp</nonterminal>
+    <nonterminal>relational_expression_temp</nonterminal>
+    <nonterminal>equality_expression_temp</nonterminal>
+    <nonterminal>init_declarator_temp</nonterminal>
+    <nonterminal>parameter_list_temp</nonterminal>
+    <nonterminal>additive_expression_temp</nonterminal>
+    <nonterminal>selection_statement_temp</nonterminal>
+    <nonterminal>block_item_list_temp</nonterminal>
+    <nonterminal>parameter_list_question</nonterminal>
+    <nonterminal>argument_list_question</nonterminal>
+  </nonterminals>
+
+  <start>program</start>
+
+  <rules>
+    <rule>
+      <left>program</left>
+      <right>type_specifier identifier ( parameter_list_question ) compound_statement</right>
+    </rule>
+    <rule>
+      <left>parameter</left>
+      <right>type_specifier declarator</right>
+    </rule>
+    <rule>
+      <left>parameter_list_temp</left>
+      <right>, parameter parameter_list_temp</right>
+      <right>EPSILON</right>
+    </rule>
+    <rule>
+      <left>parameter_list</left>
+      <right>parameter parameter_list_temp</right>
+      <right>parameter_list_temp</right>
+    </rule>
+    <rule>
+      <left>parameter_list_question</left>
+      <right>parameter_list</right>
+      <right>EPSILON</right>
+    </rule>
+
+    <rule>
+      <left>argument</left>
+      <right>expression</right>
+    </rule>
+    <rule>
+      <left>argument_list_temp</left>
+      <right>, argument argument_list_temp</right>
+      <right>EPSILON</right>
+    </rule>
+    <rule>
+      <left>argument_list</left>
+      <right>argument argument_list_temp</right>
+      <right>argument_list_temp</right>
+    </rule>
+    <rule>
+      <left>argument_list_question</left>
+      <right>argument_list</right>
+      <right>EPSILON</right>
+    </rule>
+
+    <rule>
+      <left>declaration</left>
+      <right>type_specifier init_declarator_list ;</right>
+    </rule>
+    <rule>
+      <left>init_declarator_list_temp</left>
+      <right>, init_declarator init_declarator_list_temp</right>
+      <right>EPSILON</right>
+    </rule>
+    <rule>
+      <left>init_declarator_list</left>
+      <right>init_declarator init_declarator_list_temp</right>
+      <right>init_declarator_list_temp</right>
+    </rule>
+    <rule>
+      <left>init_declarator</left>
+      <right>declarator init_declarator_temp</right>
+    </rule>
+    <rule>
+      <left>init_declarator_temp</left>
+      <right>EPSILON</right>
+      <right>= initializer</right>
+    </rule>
+    <rule>
+      <left>type_specifier</left>
+      <right>void</right>
+      <right>int</right>
+      <right>float</right>
+      <right>boolean</right>
+    </rule>
+    <rule>
+      <left>declarator_tail</left>
+      <right>[ declarator_int ]</right>
+      <right>EPSILON</right>
+    </rule>
+    <rule>
+      <left>declarator_int</left>
+      <right>integer_constant</right>
+      <right>EPSILON</right>
+    </rule>
+    <rule>
+      <left>declarator</left>
+      <right>direct_declarator declarator_tail</right>
+    </rule>
+    <rule>
+      <left>direct_declarator</left>
+      <right>identifier</right>
+      <right>( declarator )</right>
+    </rule>
+    <rule>
+      <left>initializer</left>
+      <right>expression</right>
+    </rule>
+
+    <rule>
+      <left>primary_expression_tail</left>
+      <right>[ expression ]</right>
+      <right>( argument_list_question )</right>
+      <right>EPSILON</right>
+    </rule>
+    <rule>
+      <left>primary_expression</left>
+      <right>identifier primary_expression_tail</right>
+      <right>constant</right>
+      <right>( expression )</right>
+    </rule>
+
+    <rule>
+      <left>constant</left>
+      <right>integer_constant</right>
+      <right>float_constant</right>
+      <right>boolean_constant</right>
+      <right>string_constant</right>
+    </rule>
+
+    <rule>
+      <left>unary_operator</left>
+      <right>+</right>
+      <right>-</right>
+      <right>!</right>
+    </rule>
+    <rule>
+      <left>unary_expression</left>
+      <right>primary_expression</right>
+      <right>unary_operator primary_expression</right>
+    </rule>
+
+    <rule>
+      <left>multiplicative_expression_temp</left>
+      <right>* unary_expression multiplicative_expression_temp</right>
+      <right>/ unary_expression multiplicative_expression_temp</right>
+      <right>EPSILON</right>
+    </rule>
+    <rule>
+      <left>multiplicative_expression</left>
+      <right>unary_expression multiplicative_expression_temp</right>
+    </rule>
+
+    <rule>
+      <left>additive_expression_temp</left>
+      <right>+ multiplicative_expression additive_expression_temp</right>
+      <right>- multiplicative_expression additive_expression_temp</right>
+      <right>EPSILON</right>
+    </rule>
+    <rule>
+      <left>additive_expression</left>
+      <right>multiplicative_expression additive_expression_temp</right>
+    </rule>
+
+    <rule>
+      <left>relational_expression_temp</left>
+      <right>< additive_expression relational_expression_temp</right>
+      <right>> additive_expression relational_expression_temp</right>
+      <right><= additive_expression relational_expression_temp</right>
+      <right>>= additive_expression relational_expression_temp</right>
+      <right>EPSILON</right>
+    </rule>
+    <rule>
+      <left>relational_expression</left>
+      <right>additive_expression relational_expression_temp</right>
+    </rule>
+
+    <rule>
+      <left>equality_expression_temp</left>
+      <right>== relational_expression equality_expression_temp</right>
+      <right>!= relational_expression equality_expression_temp</right>
+      <right>EPSILON</right>
+    </rule>
+    <rule>
+      <left>equality_expression</left>
+      <right>relational_expression equality_expression_temp</right>
+    </rule>
+
+    <rule>
+      <left>assignment_expression_temp</left>
+      <right>= equality_expression assignment_expression_temp</right>
+      <right>EPSILON</right>
+    </rule>
+    <rule>
+      <left>assignment_expression</left>
+      <right>equality_expression assignment_expression_temp</right>
+    </rule>
+
+    <rule>
+      <left>expression</left>
+      <right>assignment_expression</right>
+    </rule>
+
+    <rule>
+      <left>expression_question</left>
+      <right>expression</right>
+      <right>EPSILON</right>
+    </rule>
+
+    <rule>
+      <left>statement</left>
+      <right>compound_statement</right>
+      <right>expression_statement</right>
+      <right>selection_statement</right>
+      <right>for_statement</right>
+      <right>while_statement</right>
+      <right>break_statement</right>
+      <right>continue_statement</right>
+      <right>return_statement</right>
+    </rule>
+
+    <rule>
+      <left>compound_statement</left>
+      <right>{ block_item_list }</right>
+    </rule>
+    <rule>
+      <left>block_item</left>
+      <right>declaration</right>
+      <right>statement</right>
+    </rule>
+    <rule>
+      <left>block_item_list</left>
+      <right>block_item block_item_list_temp</right>
+      <right>EPSILON</right>
+    </rule>
+    <rule>
+      <left>block_item_list_temp</left>
+      <right>EPSILON</right>
+      <right>block_item_list</right>
+    </rule>
+
+    <rule>
+      <left>expression_statement</left>
+      <right>expression ;</right>
+      <right>;</right>
+    </rule>
+
+    <rule>
+      <left>return_statement</left>
+      <right>return expression_question ;</right>
+    </rule>
+
+    <rule>
+      <left>continue_statement</left>
+      <right>continue ;</right>
+    </rule>
+
+    <rule>
+      <left>break_statement</left>
+      <right>break ;</right>
+    </rule>
+
+    <rule>
+      <left>selection_statement</left>
+      <right>if ( expression ) compound_statement selection_statement_temp</right>
+    </rule>
+    <rule>
+      <left>selection_statement_temp</left>
+      <right>EPSILON</right>
+      <right>else statement</right>
+    </rule>
+
+    <rule>
+      <left>for_statement</left>
+      <right>for ( expression_question ; expression_question ; expression_question ) statement</right>
+    </rule>
+
+    <rule>
+      <left>while_statement</left>
+      <right>while ( expression ) statement</right>
+    </rule>
+</grammar>
+
+
