@@ -100,7 +100,7 @@ public class Parser {
         // Recursively traverse the children of the current node
         for (Node child : node.getChildren()) {
             addNode(child);
-            if (!checkTerminal(child.getTokenized().getToken())) {
+            if (!checkTerminal(child.getTokenized().getToken()) && child.getChildren().isEmpty()) {
                 Node eps = new Node(new Tokenized("epsilon"));
                 child.getChildren().add(eps);
             }
