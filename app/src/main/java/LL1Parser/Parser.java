@@ -15,14 +15,14 @@ public class Parser {
     private static Node startNode;
     private static String startSymbol;
 
-    public Parser(Map<String, Map<String, List<String>>> parseTable, String startSymbol, List<String> input) {
+    public Parser(Map<String, Map<String, List<String>>> parseTable, String startSymbol, List<Tokenized> input) {
         this.parseTable = parseTable;
         this.startSymbol = startSymbol;
         parse(input, parseTable);
         addNode(startNode);
     }
 
-    private static Node parse(List<String> input, Map<String, Map<String, List<String>>> parseTable) {
+    private static Node parse(List<Tokenized> input, Map<String, Map<String, List<String>>> parseTable) {
         Stack<Node> stack = new Stack<>();
         stack.push(new Node(new Tokenized("$")));
         startNode = new Node(new Tokenized(startSymbol));
@@ -33,15 +33,22 @@ public class Parser {
             Node top = stack.peek();
             if (top.getTokenized().getToken().equals("$") && i == input.size()) {
                 return startNode;
-            } else if (top.getTokenized().getToken().equals(input.get(i))) {
+            } else if (top.getTokenized().getToken().equals(input.get(i).getToken())) {
                 stack.pop();
                 i++;
-            } else if (parseTable.containsKey(top.getTokenized().getToken()) && parseTable.get(top.getTokenized().getToken()).containsKey(input.get(i))) {
+            } else if (parseTable.containsKey(top.getTokenized().getToken()) && parseTable.get(top.getTokenized().getToken()).containsKey(input.get(i).getToken())) {
                 stack.pop();
-                List<String> production = parseTable.get(top.getTokenized().getToken()).get(input.get(i));
+                List<String> production = parseTable.get(top.getTokenized().getToken()).get(input.get(i).getToken());
                 for (int j = production.size() - 1; j >= 0; j--) {
                     if (!production.get(j).equals("epsilon")) {
-                        Node child = new Node(new Tokenized(production.get(j)));
+                        Node child;
+                        if (!checkTerminal(parseTable.get(top.getTokenized().getToken()).get(input.get(i).getToken()).get(0))) {
+                            child = new Node(new Tokenized(
+                                    parseTable.get(top.getTokenized().getToken()).get(input.get(i).getToken()).get(0),
+                                    production.get(j)));
+                        } else {
+                            child = new Node(new Tokenized(input.get(i).getInput(), production.get(j)));
+                        }
                         top.getChildren().add(child);
                         stack.push(child);
                     }
@@ -83,7 +90,7 @@ public class Parser {
         // Generate a unique identifier for the current node
         String nodeId = "node" + System.identityHashCode(node);
         // Write the current node to the DOT file
-        writer.println(nodeId + " [label=\"" + node.getTokenized().getToken() + "\"];");
+        writer.println(nodeId + " [label=\"" + node.getTokenized().getToken() + ": " + node.getTokenized().getInput() + "\"];");
         // Recursively generate DOT code for the children of the current node
         for (Node child : node.getChildren()) {
             generateDotFile(child, writer);
@@ -101,7 +108,7 @@ public class Parser {
         for (Node child : node.getChildren()) {
             addNode(child);
             if (!checkTerminal(child.getTokenized().getToken()) && child.getChildren().isEmpty()) {
-                Node eps = new Node(new Tokenized("epsilon"));
+                Node eps = new Node(new Tokenized("epsilon", "epsilon"));
                 child.getChildren().add(eps);
             }
         }

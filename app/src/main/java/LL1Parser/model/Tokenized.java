@@ -8,6 +8,11 @@ public class Tokenized {
         this.token = token;
     }
 
+    public Tokenized(String input, String token) {
+        this.token = token;
+        this.input = input;
+    }
+
     public String getInput() {
         return input;
     }
