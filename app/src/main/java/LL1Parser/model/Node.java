@@ -5,13 +5,20 @@ import java.util.List;
 
 public class Node {
 
-    private String symbol;
+    private Tokenized symbol;
 
-    public String getSymbol() {
+    private List<Node> children;
+
+    public Node(Tokenized symbol) {
+        this.symbol = symbol;
+        this.children = new ArrayList<>();
+    }
+
+    public Tokenized getTokenized() {
         return symbol;
     }
 
-    public void setSymbol(String symbol) {
+    public void setTokenized(Tokenized symbol) {
         this.symbol = symbol;
     }
 
@@ -21,13 +28,6 @@ public class Node {
 
     public void setChildren(List<Node> children) {
         this.children = children;
-    }
-
-    private List<Node> children;
-
-    public Node(String symbol) {
-        this.symbol = symbol;
-        this.children = new ArrayList<>();
     }
 
 

@@ -1,7 +1,7 @@
 package LL1Parser;
 
 import LL1Parser.model.Node;
-import LL1Parser.utils.ParseTableUtil;
+import LL1Parser.model.Tokenized;
 import guru.nidi.graphviz.engine.Format;
 import guru.nidi.graphviz.engine.Graphviz;
 import guru.nidi.graphviz.model.MutableGraph;
@@ -19,28 +19,29 @@ public class Parser {
         this.parseTable = parseTable;
         this.startSymbol = startSymbol;
         parse(input, parseTable);
+        addNode(startNode);
     }
 
     private static Node parse(List<String> input, Map<String, Map<String, List<String>>> parseTable) {
         Stack<Node> stack = new Stack<>();
-        stack.push(new Node("$"));
-        startNode = new Node(startSymbol);
+        stack.push(new Node(new Tokenized("$")));
+        startNode = new Node(new Tokenized(startSymbol));
         stack.push(startNode);
 
         int i = 0;
         while (!stack.isEmpty()) {
             Node top = stack.peek();
-            if (top.getSymbol().equals("$") && i == input.size()) {
+            if (top.getTokenized().getToken().equals("$") && i == input.size()) {
                 return startNode;
-            } else if (top.getSymbol().equals(input.get(i))) {
+            } else if (top.getTokenized().getToken().equals(input.get(i))) {
                 stack.pop();
                 i++;
-            } else if (parseTable.containsKey(top.getSymbol()) && parseTable.get(top.getSymbol()).containsKey(input.get(i))) {
+            } else if (parseTable.containsKey(top.getTokenized().getToken()) && parseTable.get(top.getTokenized().getToken()).containsKey(input.get(i))) {
                 stack.pop();
-                List<String> production = parseTable.get(top.getSymbol()).get(input.get(i));
+                List<String> production = parseTable.get(top.getTokenized().getToken()).get(input.get(i));
                 for (int j = production.size() - 1; j >= 0; j--) {
                     if (!production.get(j).equals("epsilon")) {
-                        Node child = new Node(production.get(j));
+                        Node child = new Node(new Tokenized(production.get(j)));
                         top.getChildren().add(child);
                         stack.push(child);
                     }
@@ -82,7 +83,7 @@ public class Parser {
         // Generate a unique identifier for the current node
         String nodeId = "node" + System.identityHashCode(node);
         // Write the current node to the DOT file
-        writer.println(nodeId + " [label=\"" + node.getSymbol() + "\"];");
+        writer.println(nodeId + " [label=\"" + node.getTokenized().getToken() + "\"];");
         // Recursively generate DOT code for the children of the current node
         for (Node child : node.getChildren()) {
             generateDotFile(child, writer);
@@ -92,54 +93,24 @@ public class Parser {
         }
     }
 
-    public static String addParentheses(Node node) {
+    public static Node addNode(Node node) {
         if (node == null) {
-            return "";
+            return null;
         }
-        StringBuilder sb = new StringBuilder();
-        if (node.getChildren().size() == 0) {
-            // Leaf node
-            sb.append(node.getSymbol());
-        } else if (node.getChildren().size() == 1) {
-            // Unary operator
-            sb.append(node.getSymbol());
-            sb.append(addParentheses(node.getChildren().get(0)));
-        } else {
-            // Binary operator
-            boolean addParens = false;
-            for (Node child : node.getChildren()) {
-                if (containsSymbol(child, "integer_constant") || containsSymbol(child, "float_constant")) {
-                    addParens = true;
-                    break;
-                }
-            }
-            if (addParens) {
-                sb.append("(");
-            }
-            sb.append(addParentheses(node.getChildren().get(0)));
-            sb.append(" ");
-            sb.append(node.getSymbol());
-            sb.append(" ");
-            sb.append(addParentheses(node.getChildren().get(1)));
-            if (addParens) {
-                sb.append(")");
+        // Recursively traverse the children of the current node
+        for (Node child : node.getChildren()) {
+            addNode(child);
+            if (!checkTerminal(child.getTokenized().getToken())) {
+                Node eps = new Node(new Tokenized("epsilon"));
+                child.getChildren().add(eps);
             }
         }
-        return sb.toString();
+
+        return node;
     }
 
-    private static boolean containsSymbol(Node node, String symbol) {
-        if (node == null) {
-            return false;
-        }
-        if (node.getSymbol().equals(symbol)) {
-            return true;
-        }
-        for (Node child : node.getChildren()) {
-            if (containsSymbol(child, symbol)) {
-                return true;
-            }
-        }
-        return false;
+    private static boolean checkTerminal(String s) {
+        if (s.charAt(0) == '<') return false;
+        return true;
     }
 }
