@@ -237,7 +237,7 @@ public class ParseTable {
 //            System.out.println(str[str.length -1] + "]");
 //        }
         parseTbl.generateParseTable();
-        parseTbl.printParseTable();
+//        parseTbl.printParseTable();
 
         List<String> input = new ArrayList<>();
         File myObj = new File("app/src/main/resources/test.vc");
@@ -249,7 +249,7 @@ public class ParseTable {
         }
         while (myReader.hasNextLine()) {
             String data = myReader.nextLine().trim();
-            String[] dat = data.split(" ");
+            String[] dat = data.split("\\s+");
             input.addAll(List.of(dat));
         }
         System.out.println(parse2(input, parseTable, start));
