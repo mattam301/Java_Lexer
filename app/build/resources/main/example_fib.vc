@@ -11,6 +11,10 @@ void main() {
     n = getInt();
     if (n<=0)
        putString("The number should be positive.\n");
+    else
+      putString("\n\n\tI \t Fibonacci(I) \n\t=====================\n");
+
+    /*
     else {
       putString("\n\n\tI \t Fibonacci(I) \n\t=====================\n");
       next = current = 1;
@@ -24,6 +28,7 @@ void main() {
 	next    = twoaway;
       }
     }
+    */
 }
 
 /* The output from a run of this program was:

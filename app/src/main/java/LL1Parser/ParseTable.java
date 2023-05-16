@@ -89,11 +89,50 @@ public class ParseTable {
 
     public static void tokenizer(List<String> stateNames, List<String> spelling) {
         input = new ArrayList<>();
+        boolean isOneLine = false;
+        boolean ifFlag = false;
+        boolean isNotBracketed = true;
+        boolean elseFlag = false;
 
         for (int i = 0; i < stateNames.size(); i++) {
+            if (i > 0) {
+                // deal when one-line-if
+                if (spelling.get(i).equals("if")) {
+                    ifFlag = true;
+                }
+                if (ifFlag && spelling.get(i - 1).equals(")") && isNotBracketed) {
+                    isOneLine = !spelling.get(i).equals("{");
+                    if (isOneLine) {
+                        input.add("{");
+                        isNotBracketed = false;
+                    }
+                }
+                if (ifFlag && spelling.get(i - 1).equals(";") && isOneLine) {
+                    input.add("}");
+                    ifFlag = false;
+                    isOneLine = false;
+                    isNotBracketed = true;
+                }
+
+                // deal when one-line-else
+                if (spelling.get(i - 1).equals("else") && !spelling.get(i).equals("{")) {
+                    input.add("{");
+                    isNotBracketed = false;
+                    elseFlag = true;
+                    isOneLine = true;
+                }
+                if (elseFlag && spelling.get(i - 1).equals(";") && isOneLine) {
+                    input.add("}");
+                    elseFlag = false;
+                    isOneLine = false;
+                    isNotBracketed = true;
+                }
+            }
+
             if (stateNames.get(i).equals("Comment")) {
                 continue;
             }
+
             switch (stateNames.get(i)) {
                 case "Identifier" -> input.add("identifier");
                 case "String_Literal" -> input.add("string_constant");
@@ -232,17 +271,18 @@ public class ParseTable {
     }
 
     public static void parseTest() {
-        ParseTable parseTbl = new ParseTable("src/main/resources/grammar2.dat");
+        ParseTable parseTbl = new ParseTable("src/main/resources/grammar3.dat");
         firstSets = FirstFollowSetsGenerator.calculateFirstSets(grammar, terminals);
         followSets = FirstFollowSetsGenerator.calculateFollowSets(grammar, terminals, start);
 
         parseTbl.generateParseTable();
+        parseTbl.printParseTable();
         System.out.println(parse2(input, parseTable, start));
     }
 
     public static void main(String[] args) {
 
-        ParseTable parseTbl = new ParseTable("app/src/main/resources/grammar2.dat");
+        ParseTable parseTbl = new ParseTable("app/src/main/resources/grammar3.dat");
 //        FirstFollowSetsGenerator generator = new FirstFollowSetsGenerator(grammar);
 //        firstSets = generator.getFirstSets();
 //        followSets = generator.getFollowSets();
@@ -251,15 +291,11 @@ public class ParseTable {
         followSets = FirstFollowSetsGenerator.calculateFollowSets(grammar, terminals, start);
 
 //        for (String s : followSets.keySet()) {
-//            System.out.print(s + ": [");
+//            System.out.print(s + "(" + followSets.get(s).size() + ")" +  ": [");
 //            String [] str = followSets.get(s).toArray(new String[0]);
 //            for (int i = 0; i < str.length - 1; i++) {
 //                System.out.print(str[i] + ", ");
 //            }
-////            for (String list : followSets.get(s)) {
-////                System.out.print(list + ", ");
-////
-////            }
 //            System.out.println(str[str.length -1] + "]");
 //        }
         parseTbl.generateParseTable();

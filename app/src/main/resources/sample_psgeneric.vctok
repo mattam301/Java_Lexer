@@ -1,0 +1,11 @@
+// 1 statement
+void
+main
+(
+)
+{
+i
+=
+1
+;
+}

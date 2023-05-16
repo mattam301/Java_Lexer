@@ -1,17 +1,0 @@
-Tokens:
-Kind = 30 [Comment], spelling = "// this is a comment", position = 2(-20)..2(0)
-Kind = 1 [Keyword], spelling = "void", position = 2(1)..2(4)
-Kind = 1 [Identifier], spelling = "main", position = 2(6)..2(9)
-Kind = 15 [Separator], spelling = "(", position = 2(10)..2(10)
-Kind = 15 [Separator], spelling = ")", position = 2(11)..2(11)
-Kind = 15 [Separator], spelling = "{", position = 2(13)..2(13)
-Kind = 1 [Keyword], spelling = "boolean", position = 3(5)..3(11)
-Kind = 1 [Identifier], spelling = "a", position = 3(13)..3(13)
-Kind = 15 [Separator], spelling = ";", position = 3(14)..3(14)
-Kind = 1 [Identifier], spelling = "a", position = 4(5)..4(5)
-Kind = 6 [Assignment_Operator], spelling = "=", position = 4(7)..4(7)
-Kind = 16 [Integer_Literal], spelling = "1", position = 4(9)..4(9)
-Kind = 15 [Separator], spelling = ";", position = 4(10)..4(10)
-Kind = 15 [Separator], spelling = "}", position = 5(0)..5(0)
-
-There's no errors !!!
