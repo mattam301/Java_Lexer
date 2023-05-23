@@ -1,5 +1,8 @@
+<<<<<<< Updated upstream
 // expressions\n
 // the tree must reflect correctly the associativity of +\n
+=======
+>>>>>>> Stashed changes
 void
 main
 (
